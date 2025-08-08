@@ -1,5 +1,5 @@
 import React, { useReducer, type ReactNode } from "react";
-import { appReducer } from "./reducers";
+import { appReducer } from "../reducers";
 import { initialState } from "./initialState";
 import { StoreContext } from "./context";
 

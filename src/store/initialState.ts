@@ -18,4 +18,8 @@ export const initialState: AppState = {
       description: null,
     },
   },
+  file: {
+    headers: [],
+    data: [],
+  },
 };

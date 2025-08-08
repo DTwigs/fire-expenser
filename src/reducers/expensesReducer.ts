@@ -1,11 +1,4 @@
-import type {
-  AppState,
-  ExpensesState,
-  SettingsState,
-  AppAction,
-  ExpensesAction,
-  SettingsAction,
-} from "./types";
+import type { ExpensesState, ExpensesAction } from "../store/types";
 
 // Expenses reducer
 export const expensesReducer = (
@@ -61,23 +54,4 @@ export const expensesReducer = (
     default:
       return state;
   }
-};
-
-// Settings reducer
-export const settingsReducer = (
-  state: SettingsState,
-  action: SettingsAction
-): SettingsState => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
-
-// Main app reducer that combines all reducers
-export const appReducer = (state: AppState, action: AppAction): AppState => {
-  return {
-    expenses: expensesReducer(state.expenses, action as ExpensesAction),
-    settings: settingsReducer(state.settings, action as SettingsAction),
-  };
 };

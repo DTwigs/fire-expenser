@@ -3,6 +3,7 @@ export interface AppState {
   // Add your state slices here
   expenses: ExpensesState;
   settings: SettingsState;
+  file: FileState;
 }
 
 export interface ExpensesState {
@@ -15,6 +16,11 @@ export interface ExpensesState {
 export interface SettingsState {
   expenseCategories: string[];
   fileHeaderRoles: { [key in keyof FileHeaderRole]: number | null };
+}
+
+export interface FileState {
+  headers: string[];
+  data: Array<{ [key: string]: string }>;
 }
 
 export interface ExpenseItem {
@@ -35,8 +41,12 @@ export interface FileHeaderRole {
   description: string;
 }
 
+export interface FileDataItem {
+  [key: string]: string;
+}
+
 // Action types
-export type AppAction = ExpensesAction | SettingsAction;
+export type AppAction = ExpensesAction | SettingsAction | FileAction;
 
 export type ExpensesAction =
   | { type: "EXPENSES_LOADING" }
@@ -52,6 +62,11 @@ export type ExpensesAction =
       type: "UPDATE_EXPENSE_CATEGORIES";
       payload: { category: string; item: ExpenseItem };
     };
+
+export type FileAction =
+  | { type: "ADD_FILE_HEADERS"; payload: string[] }
+  | { type: "ADD_FILE_DATA"; payload: FileDataItem[] }
+  | { type: "REMOVE_FILE" };
 
 export type SettingsAction = {
   type: "UPDATE_FILE_HEADER_ROLES";

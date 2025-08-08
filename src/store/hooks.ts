@@ -33,3 +33,11 @@ export const useSettings = () => {
     dispatch,
   };
 };
+
+export const useFile = () => {
+  const { state, dispatch } = useStore();
+  return {
+    file: state.file,
+    dispatch,
+  };
+};
