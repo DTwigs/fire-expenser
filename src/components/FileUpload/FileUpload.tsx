@@ -46,7 +46,7 @@ const FileUpload: React.FC = () => {
 
   const handleSubmit = useCallback(() => {
     if (selectedFile) {
-      navigate("/loading");
+      navigate("/file-headers");
     }
   }, [selectedFile, navigate]);
 

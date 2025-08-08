@@ -19,7 +19,6 @@ const LoadingTransition: React.FC = () => {
         const newProgress = prev + increment;
         if (newProgress >= 100) {
           clearInterval(timer);
-          navigate("/categorization");
           return 100;
         }
         return newProgress;
@@ -28,6 +27,10 @@ const LoadingTransition: React.FC = () => {
 
     return () => clearInterval(timer);
   }, [navigate]);
+
+  if (progress >= 100) {
+    navigate("/categorization");
+  }
 
   return (
     <div className="loading-transition">

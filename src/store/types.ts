@@ -33,12 +33,12 @@ export interface ExpenseItem {
 }
 
 export interface FileHeaderRole {
-  date: string;
-  debit: string;
-  credit: string;
-  card: string;
-  category: string;
-  description: string;
+  date: number | null;
+  debit: number | null;
+  credit: number | null;
+  card: number | null;
+  category: number | null;
+  description: number | null;
 }
 
 export interface FileDataItem {
@@ -68,7 +68,9 @@ export type FileAction =
   | { type: "ADD_FILE_DATA"; payload: FileDataItem[] }
   | { type: "REMOVE_FILE" };
 
-export type SettingsAction = {
-  type: "UPDATE_FILE_HEADER_ROLES";
-  payload: FileHeaderRole;
-};
+export type SettingsAction =
+  | { type: "UPDATE_FILE_HEADER_ROLES"; payload: FileHeaderRole }
+  | {
+      type: "UPDATE_SINGLE_HEADER_ROLE";
+      payload: { role: keyof FileHeaderRole; headerIndex: number | null };
+    };
