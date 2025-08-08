@@ -1,34 +1,23 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import AppRoutes from "./components/AppRoutes";
+import StepHeader from "./components/StepHeader";
+import Icon from "@mdi/react";
+import { mdiCurrencyUsd } from "@mdi/js";
+import { StoreProvider } from "./store";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState<number>(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <StoreProvider>
+      <div className="App">
+        <StepHeader />
+        <h1>
+          <Icon path={mdiCurrencyUsd} size={1.5} color="#4CAF50" /> FIRE
+          Expenser
+        </h1>
+
+        <AppRoutes />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          BUTTS is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </StoreProvider>
   );
 }
 
