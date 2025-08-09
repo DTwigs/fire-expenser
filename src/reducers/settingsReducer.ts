@@ -1,3 +1,4 @@
+import { initialState } from "../store/initialState";
 import type { SettingsState, SettingsAction } from "../store/types";
 
 // Settings reducer
@@ -16,8 +17,13 @@ export const settingsReducer = (
         ...state,
         fileHeaderRoles: {
           ...state.fileHeaderRoles,
-          [action.payload.role]: action.payload.headerIndex,
+          [action.payload.role]: action.payload.header,
         },
+      };
+    case "REMOVE_FILE":
+      return {
+        ...state,
+        fileHeaderRoles: initialState.settings.fileHeaderRoles,
       };
     default:
       return state;

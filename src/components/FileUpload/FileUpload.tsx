@@ -10,8 +10,7 @@ import "./FileUpload.css";
 
 const FileUpload: React.FC = () => {
   const navigate = useNavigate();
-  const { file, dispatch } = useFile();
-  console.log("file", file);
+  const { dispatch } = useFile();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,14 +33,14 @@ const FileUpload: React.FC = () => {
   const handleFileProcessing = useCallback(
     (file: File) => {
       setIsLoading(true);
+      dispatch({ type: "REMOVE_FILE" });
 
-      // Simulate file processing
       setTimeout(() => {
         setIsLoading(false);
         parseCSV({ file, onComplete: onParseComplete, onError: onParseError });
       }, 1000);
     },
-    [onParseComplete, onParseError]
+    [onParseComplete, onParseError, dispatch]
   );
 
   const handleSubmit = useCallback(() => {

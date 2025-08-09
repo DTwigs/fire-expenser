@@ -45,13 +45,13 @@
 }
 
 .header-role.required {
-  border-color: #ff6b6b;
-  background: #fff5f5;
+  border-color: #4ecdc4;
+  background: #f0fffd;
 }
 
 .header-role.optional {
-  border-color: #4ecdc4;
-  background: #f0fffd;
+  border-color: #ccc;
+  background: #fff;
 }
 
 .header-role:hover {

@@ -3,45 +3,26 @@ import { useNavigate } from "react-router-dom";
 import NextStepButton from "../NextStepButton";
 import { useFile, useSettings } from "../../store";
 import "./MapFileHeaders.css";
+import {
+  allRoles,
+  getMappedHeader,
+  isNextStepDisabled,
+  isRequiredRole,
+  isRoleMapped,
+} from "./utils";
+import type { FileHeaderRole } from "../../store/types";
 
 const MapFileHeaders: React.FC = () => {
   const navigate = useNavigate();
   const { file } = useFile();
   const { settings, dispatch } = useSettings();
-  const [dragOverRole, setDragOverRole] = useState<
-    keyof typeof settings.fileHeaderRoles | null
-  >(null);
-
-  const requiredRoles: (keyof typeof settings.fileHeaderRoles)[] = [
-    "debit",
-    "category",
-    "description",
-  ];
-  const allRoles: (keyof typeof settings.fileHeaderRoles)[] = [
-    "date",
-    "debit",
-    "category",
-    "description",
-    "credit",
-    "card",
-  ];
-
-  const isRequiredRole = (role: keyof typeof settings.fileHeaderRoles) => {
-    return requiredRoles.includes(role);
-  };
-
-  const isNextStepDisabled = () => {
-    return requiredRoles.some(
-      (role) => settings.fileHeaderRoles[role] === null
-    );
-  };
-
-  const handleDragStart = useCallback(
-    (e: React.DragEvent, headerIndex: number) => {
-      e.dataTransfer.setData("text/plain", headerIndex.toString());
-    },
-    []
+  const [dragOverRole, setDragOverRole] = useState<keyof FileHeaderRole | null>(
+    null
   );
+
+  const handleDragStart = useCallback((e: React.DragEvent, header: string) => {
+    e.dataTransfer.setData("text/plain", header);
+  }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -57,24 +38,35 @@ const MapFileHeaders: React.FC = () => {
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    setDragOverRole(null);
+
+    // Only clear drag state if we're actually leaving the header role
+    // Check if the related target is outside our header role
+    const currentTarget = e.currentTarget as HTMLElement;
+    const relatedTarget = e.relatedTarget as HTMLElement;
+
+    if (!currentTarget.contains(relatedTarget)) {
+      setDragOverRole(null);
+    }
   }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent, role: keyof typeof settings.fileHeaderRoles) => {
       e.preventDefault();
       setDragOverRole(null);
-      const headerIndex = parseInt(e.dataTransfer.getData("text/plain"));
+      const header = e.dataTransfer.getData("text/plain");
 
       // Check if this header is already mapped to another role
       const isAlreadyMapped = Object.values(settings.fileHeaderRoles).includes(
-        headerIndex
+        header
       );
+      console.log({
+        fileHeaderRole: settings.fileHeaderRoles,
+      });
 
       if (!isAlreadyMapped) {
         dispatch({
           type: "UPDATE_SINGLE_HEADER_ROLE",
-          payload: { role, headerIndex },
+          payload: { role, header },
         });
       }
     },
@@ -85,16 +77,11 @@ const MapFileHeaders: React.FC = () => {
     (role: keyof typeof settings.fileHeaderRoles) => {
       dispatch({
         type: "UPDATE_SINGLE_HEADER_ROLE",
-        payload: { role, headerIndex: null },
+        payload: { role, header: null },
       });
     },
     [dispatch, settings]
   );
-
-  const getMappedHeader = (role: keyof typeof settings.fileHeaderRoles) => {
-    const headerIndex = settings.fileHeaderRoles[role];
-    return headerIndex !== null ? file.headers[headerIndex] : null;
-  };
 
   const handleSubmit = useCallback(() => {
     navigate("/loading");
@@ -126,9 +113,9 @@ const MapFileHeaders: React.FC = () => {
                 )}
               </div>
               <div className="mapped-header">
-                {getMappedHeader(role) ? (
+                {getMappedHeader(settings, role) ? (
                   <div className="mapped-header-content">
-                    <span>{getMappedHeader(role)}</span>
+                    <span>{getMappedHeader(settings, role)}</span>
                     <button
                       className="remove-mapping"
                       onClick={() => handleRemoveMapping(role)}
@@ -162,15 +149,13 @@ const MapFileHeaders: React.FC = () => {
         </p>
         <div className="csv-headers-container">
           {file.headers.map((header, index) => {
-            const isMapped = Object.values(settings.fileHeaderRoles).includes(
-              index
-            );
+            const isMapped = isRoleMapped(settings, header);
             return (
               <div
                 key={index}
                 className={`csv-header ${isMapped ? "mapped" : ""}`}
                 draggable={!isMapped}
-                onDragStart={(e) => handleDragStart(e, index)}
+                onDragStart={(e) => handleDragStart(e, header)}
               >
                 {header}
               </div>
@@ -181,7 +166,7 @@ const MapFileHeaders: React.FC = () => {
 
       <NextStepButton
         handleSubmit={handleSubmit}
-        isDisabled={isNextStepDisabled()}
+        isDisabled={isNextStepDisabled(settings)}
       />
     </div>
   );

@@ -15,7 +15,7 @@ export interface ExpensesState {
 
 export interface SettingsState {
   expenseCategories: string[];
-  fileHeaderRoles: { [key in keyof FileHeaderRole]: number | null };
+  fileHeaderRoles: { [key in keyof FileHeaderRole]: string | null };
 }
 
 export interface FileState {
@@ -33,12 +33,12 @@ export interface ExpenseItem {
 }
 
 export interface FileHeaderRole {
-  date: number | null;
-  debit: number | null;
-  credit: number | null;
-  card: number | null;
-  category: number | null;
-  description: number | null;
+  date: string | null;
+  "expense amount": string | null;
+  "rebate amount": string | null;
+  card: string | null;
+  category: string | null;
+  description: string | null;
 }
 
 export interface FileDataItem {
@@ -72,5 +72,6 @@ export type SettingsAction =
   | { type: "UPDATE_FILE_HEADER_ROLES"; payload: FileHeaderRole }
   | {
       type: "UPDATE_SINGLE_HEADER_ROLE";
-      payload: { role: keyof FileHeaderRole; headerIndex: number | null };
-    };
+      payload: { role: keyof FileHeaderRole; header: string | null };
+    }
+  | { type: "REMOVE_FILE" };

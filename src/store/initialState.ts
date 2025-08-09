@@ -11,8 +11,8 @@ export const initialState: AppState = {
     expenseCategories: [],
     fileHeaderRoles: {
       date: null,
-      debit: null,
-      credit: null,
+      "expense amount": null,
+      "rebate amount": null,
       card: null,
       category: null,
       description: null,
