@@ -1,6 +1,7 @@
 import { useContext } from "react";
-import type { AppState, AppAction } from "./types";
-import { StoreContext } from "./context";
+import type { AppState } from "./types";
+import type { AppAction } from "../reducers/types";
+import { StoreContext } from "../contexts/StoreContext";
 
 // Create the store context
 interface StoreContextType {

@@ -1,7 +1,7 @@
 import React, { useReducer, type ReactNode } from "react";
 import { appReducer } from "../reducers";
-import { initialState } from "./initialState";
-import { StoreContext } from "./context";
+import { initialState } from "../store/initialState";
+import { StoreContext } from "./StoreContext";
 
 // Store provider component
 interface StoreProviderProps {

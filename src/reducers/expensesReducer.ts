@@ -1,4 +1,5 @@
-import type { ExpensesState, ExpensesAction } from "../store/types";
+import type { ExpensesState } from "../store/types";
+import type { ExpensesAction } from "./types";
 
 // Expenses reducer
 export const expensesReducer = (

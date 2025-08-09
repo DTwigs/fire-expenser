@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NextStepButton from "../NextStepButton";
+import NextStepButton from "../../components/NextStepButton";
 import { useFile, useSettings } from "../../store";
 import "./MapFileHeaders.css";
 import {

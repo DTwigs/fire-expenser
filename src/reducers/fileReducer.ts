@@ -1,4 +1,5 @@
-import type { FileState, FileAction } from "../store/types";
+import type { FileState } from "../store/types";
+import type { FileAction } from "./types";
 
 // File reducer
 export const fileReducer = (

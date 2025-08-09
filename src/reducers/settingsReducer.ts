@@ -1,5 +1,6 @@
 import { initialState } from "../store/initialState";
-import type { SettingsState, SettingsAction } from "../store/types";
+import type { SettingsState } from "../store/types";
+import type { SettingsAction } from "./types";
 
 // Settings reducer
 export const settingsReducer = (

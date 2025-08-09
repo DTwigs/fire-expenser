@@ -5,7 +5,7 @@ import { mdiCurrencyUsd } from "@mdi/js";
 import { parseCSV } from "../../utils/fileManagement";
 import { useFile, type FileDataItem } from "../../store";
 import DragAndDropFileInput from "../DragAndDropFileInput/DragAndDropFileInput";
-import NextStepButton from "../NextStepButton";
+import NextStepButton from "../../components/NextStepButton";
 import "./FileUpload.css";
 
 const FileUpload: React.FC = () => {
