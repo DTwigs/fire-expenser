@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import NextStepButton from "../../components/NextStepButton";
 import { useFile, useSettings } from "../../store";
 import "./MapFileHeaders.css";
@@ -11,9 +10,9 @@ import {
   isRoleMapped,
 } from "./utils";
 import type { FileHeaderRole } from "../../store/types";
+import { WIZARD_STEP_KEYS } from "../constants";
 
 const MapFileHeaders: React.FC = () => {
-  const navigate = useNavigate();
   const { file } = useFile();
   const { settings, dispatch } = useSettings();
   const [dragOverRole, setDragOverRole] = useState<keyof FileHeaderRole | null>(
@@ -82,10 +81,6 @@ const MapFileHeaders: React.FC = () => {
     },
     [dispatch, settings]
   );
-
-  const handleSubmit = useCallback(() => {
-    navigate("/loading");
-  }, [navigate]);
 
   return (
     <div className="file-upload-container">
@@ -165,7 +160,7 @@ const MapFileHeaders: React.FC = () => {
       </div>
 
       <NextStepButton
-        handleSubmit={handleSubmit}
+        currentStep={WIZARD_STEP_KEYS.FILE_HEADERS}
         isDisabled={isNextStepDisabled(settings)}
       />
     </div>

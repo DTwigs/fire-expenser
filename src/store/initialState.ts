@@ -1,3 +1,4 @@
+import { WIZARD_STEP_KEYS } from "../WizardSteps/constants";
 import type { AppState } from "./types";
 
 export const initialState: AppState = {
@@ -21,5 +22,9 @@ export const initialState: AppState = {
   file: {
     headers: [],
     data: [],
+  },
+  wizard: {
+    currentStep: WIZARD_STEP_KEYS.FILE_UPLOAD,
+    furthestStep: WIZARD_STEP_KEYS.FILE_UPLOAD,
   },
 };

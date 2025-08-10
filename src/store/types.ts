@@ -1,9 +1,12 @@
+import type { WizardStepKey } from "../WizardSteps/types";
+
 // Global store types
 export interface AppState {
   // Add your state slices here
   expenses: ExpensesState;
   settings: SettingsState;
   file: FileState;
+  wizard: WizardState;
 }
 
 export interface ExpensesState {
@@ -22,6 +25,11 @@ export interface FileState {
   headers: string[];
   data: Array<{ [key: string]: string }>;
 }
+
+export type WizardState = {
+  currentStep: WizardStepKey;
+  furthestStep: WizardStepKey;
+};
 
 export interface ExpenseItem {
   id: string;

@@ -1,73 +1,37 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
-import { mdiFileUpload, mdiTagMultiple, mdiChartLine } from "@mdi/js";
+import { useWizard } from "../../store";
+import { WIZARD_STEP_ORDER, WIZARD_STEPS } from "../../WizardSteps/constants";
 import "./StepHeader.css";
-
-interface Step {
-  name: string;
-  path: string;
-  icon: string;
-  color: string;
-}
-
-const steps: Step[] = [
-  {
-    name: "File Upload",
-    path: "/file-upload",
-    icon: mdiFileUpload,
-    color: "#FF9800",
-  },
-  {
-    name: "Categorization",
-    path: "/categorization",
-    icon: mdiTagMultiple,
-    color: "#2196F3",
-  },
-  {
-    name: "Results",
-    path: "/output",
-    icon: mdiChartLine,
-    color: "#4CAF50",
-  },
-];
+import type { WizardStepKey } from "../../WizardSteps/types";
 
 const StepHeader: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+  const { wizard, dispatch } = useWizard();
+  const { currentStep, furthestStep } = wizard;
 
-  const getCurrentStepIndex = (): number => {
-    const currentPath = location.pathname;
-    // Handle root path as File Upload step
-    if (currentPath === "/") {
-      return 0;
-    }
-    const stepIndex = steps.findIndex((step) => step.path === currentPath);
-    return stepIndex >= 0 ? stepIndex : 0; // Default to first step if not found
-  };
-
-  const currentStepIndex = getCurrentStepIndex();
-
-  const handleStepClick = (stepIndex: number) => {
+  const handleStepClick = (stepKey: WizardStepKey) => {
     // Only allow navigation to previous steps
-    if (stepIndex <= currentStepIndex) {
-      navigate(steps[stepIndex].path);
+    if (WIZARD_STEPS[stepKey].order <= WIZARD_STEPS[furthestStep].order) {
+      dispatch({ type: "SET_CURRENT_STEP", payload: stepKey });
+      navigate(WIZARD_STEPS[stepKey].url);
     }
   };
 
   return (
     <div className="step-header-wrapper">
       <div className="step-header-container">
-        {steps.map((step, index) => {
-          const isCurrentStep = index === currentStepIndex;
-          const isPreviousStep = index < currentStepIndex;
-          const isClickable = index <= currentStepIndex;
+        {Object.entries(WIZARD_STEPS).map(([key, step]) => {
+          const isCurrentStep = step.order === WIZARD_STEPS[currentStep].order;
+          const isPreviousStep = step.order < WIZARD_STEPS[currentStep].order;
+          const isClickable = step.order <= WIZARD_STEPS[furthestStep].order;
 
           return (
-            <>
+            <React.Fragment key={key}>
               <div
-                key={step.path}
-                onClick={() => handleStepClick(index)}
+                key={`${key}-step`}
+                onClick={() => handleStepClick(key as WizardStepKey)}
                 className={`step-item ${
                   isClickable ? "step-item-clickable" : "step-item-disabled"
                 } ${isCurrentStep ? "step-item-current" : "step-item-default"}`}
@@ -82,12 +46,13 @@ const StepHeader: React.FC = () => {
                     isCurrentStep ? "step-text step-text-current" : "step-text"
                   }
                 >
-                  {step.name}
+                  {step.title}
                 </span>
               </div>
 
-              {index < steps.length - 1 && (
+              {step.order < WIZARD_STEP_ORDER.length && (
                 <div
+                  key={`${key}-divider`}
                   className={`step-divider ${
                     isPreviousStep
                       ? "step-divider-completed"
@@ -95,7 +60,7 @@ const StepHeader: React.FC = () => {
                   }`}
                 />
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </div>

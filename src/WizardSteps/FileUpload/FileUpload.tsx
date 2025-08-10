@@ -1,19 +1,26 @@
-import React, { useState, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import Icon from "@mdi/react";
 import { mdiCurrencyUsd } from "@mdi/js";
 import { parseCSV } from "../../utils/fileManagement";
-import { useFile, type FileDataItem } from "../../store";
-import DragAndDropFileInput from "../DragAndDropFileInput/DragAndDropFileInput";
+import { useFile, useWizard, type FileDataItem } from "../../store";
+import DragAndDropFileInput from "../../components/DragAndDropFileInput/DragAndDropFileInput";
 import NextStepButton from "../../components/NextStepButton";
 import "./FileUpload.css";
+import { WIZARD_STEP_KEYS } from "../constants";
 
 const FileUpload: React.FC = () => {
-  const navigate = useNavigate();
+  const { dispatch: dispatchWizard } = useWizard();
   const { dispatch } = useFile();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    dispatchWizard({
+      type: "SET_CURRENT_STEP",
+      payload: WIZARD_STEP_KEYS.FILE_UPLOAD,
+    });
+  }, [dispatchWizard]);
 
   const onParseComplete = useCallback(
     (results: Papa.ParseResult<FileDataItem>) => {
@@ -26,9 +33,16 @@ const FileUpload: React.FC = () => {
     [dispatch]
   );
 
-  const onParseError = useCallback((error: Papa.ParseError) => {
-    console.error("Error parsing CSV:", error);
-  }, []);
+  const onParseError = useCallback(
+    (error: Papa.ParseError) => {
+      console.error("Error parsing CSV:", error);
+      dispatchWizard({
+        type: "SET_CURRENT_STEP",
+        payload: WIZARD_STEP_KEYS.FILE_UPLOAD,
+      });
+    },
+    [dispatchWizard]
+  );
 
   const handleFileProcessing = useCallback(
     (file: File) => {
@@ -42,12 +56,6 @@ const FileUpload: React.FC = () => {
     },
     [onParseComplete, onParseError, dispatch]
   );
-
-  const handleSubmit = useCallback(() => {
-    if (selectedFile) {
-      navigate("/file-headers");
-    }
-  }, [selectedFile, navigate]);
 
   const handleRemoveFile = useCallback(() => {
     setSelectedFile(null);
@@ -73,7 +81,7 @@ const FileUpload: React.FC = () => {
         fileInputRef={fileInputRef}
       />
       <NextStepButton
-        handleSubmit={handleSubmit}
+        currentStep={WIZARD_STEP_KEYS.FILE_UPLOAD}
         isDisabled={!selectedFile && !isLoading}
       />
     </div>

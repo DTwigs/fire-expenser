@@ -42,3 +42,11 @@ export const useFile = () => {
     dispatch,
   };
 };
+
+export const useWizard = () => {
+  const { state, dispatch } = useStore();
+  return {
+    wizard: state.wizard,
+    dispatch,
+  };
+};

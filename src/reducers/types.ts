@@ -1,7 +1,12 @@
 import type { ExpenseItem, FileDataItem, FileHeaderRole } from "../store/types";
+import type { WizardStepKey } from "../WizardSteps/types";
 
 // Action types
-export type AppAction = ExpensesAction | SettingsAction | FileAction;
+export type AppAction =
+  | ExpensesAction
+  | SettingsAction
+  | FileAction
+  | WizardAction;
 
 export type ExpensesAction =
   | { type: "EXPENSES_LOADING" }
@@ -30,3 +35,7 @@ export type SettingsAction =
       payload: { role: keyof FileHeaderRole; header: string | null };
     }
   | { type: "REMOVE_FILE" };
+
+export type WizardAction =
+  | { type: "SET_CURRENT_STEP"; payload: WizardStepKey }
+  | { type: "SET_FURTHEST_STEP"; payload: WizardStepKey };
