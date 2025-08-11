@@ -4,12 +4,14 @@ import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 import "./LoadingTransition.css";
 
-const LoadingTransition: React.FC = () => {
+const LoadingTransition: React.FC<{ onComplete: () => void }> = ({
+  onComplete,
+}) => {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const duration = 3000; // 3 seconds
+    const duration = 1000; // 3 seconds
     const interval = 50; // Update every 50ms for smooth animation
     const steps = duration / interval;
     const increment = 100 / steps;
@@ -29,7 +31,7 @@ const LoadingTransition: React.FC = () => {
   }, [navigate]);
 
   if (progress >= 100) {
-    navigate("/categorization");
+    onComplete();
   }
 
   return (

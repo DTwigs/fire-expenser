@@ -8,7 +8,7 @@ import NextStepButton from "../../components/NextStepButton";
 import "./FileUpload.css";
 import { WIZARD_STEP_KEYS } from "../constants";
 
-const FileUpload: React.FC = () => {
+export const FileUpload: React.FC = () => {
   const { dispatch: dispatchWizard } = useWizard();
   const { dispatch } = useFile();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -87,5 +87,3 @@ const FileUpload: React.FC = () => {
     </div>
   );
 };
-
-export default FileUpload;

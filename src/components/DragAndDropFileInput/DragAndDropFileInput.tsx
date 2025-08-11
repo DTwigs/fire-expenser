@@ -20,7 +20,6 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
   setSelectedFile,
   handleRemoveFile,
 }) => {
-  console.log("isLoading", isLoading);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const handleFileSelect = useCallback(

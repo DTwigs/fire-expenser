@@ -2,28 +2,28 @@ import type { WizardStepKey } from "../WizardSteps/types";
 
 // Global store types
 export interface AppState {
-  // Add your state slices here
   expenses: ExpensesState;
-  settings: SettingsState;
   file: FileState;
   wizard: WizardState;
 }
 
-export interface ExpensesState {
-  rawItems: ExpenseItem[];
-  categorizedItems: Map<string, ExpenseItem>;
-  isLoading: boolean;
-  error: string | null;
-}
+export type CategoryMapKey = string;
+export type CategoryMapper = Map<string, CategoryMapKey>;
+export type CategorizedExpenseItems = Map<
+  CategoryMapKey,
+  CategorizedExpenseItem[]
+>;
 
-export interface SettingsState {
-  expenseCategories: string[];
-  fileHeaderRoles: { [key in keyof FileHeaderRole]: string | null };
+export interface ExpensesState {
+  categorizedItems: CategorizedExpenseItems;
+  categoryMapper: CategoryMapper;
+  error: string | null;
 }
 
 export interface FileState {
   headers: string[];
   data: Array<{ [key: string]: string }>;
+  fileHeaderRoles: FileHeaderRole;
 }
 
 export type WizardState = {
@@ -31,23 +31,34 @@ export type WizardState = {
   furthestStep: WizardStepKey;
 };
 
-export interface ExpenseItem {
-  id: string;
-  amount: number;
+export type RawExpenseItem = {
+  expense_amount: string;
   category: string;
   description: string;
-  date: string;
-  tags: string[];
-}
+  rebate_amount?: string | null;
+  card?: string | null;
+  date?: string | null;
+};
 
-export interface FileHeaderRole {
+export type CategorizedExpenseItem = {
+  expense_amount: string;
+  category: string;
+  description: string;
+  rebate_amount?: string | null;
+  card?: string | null;
+  date?: string | null;
+  tags?: string[] | null;
+  categoryUnknown: boolean;
+};
+
+export type FileHeaderRole = {
+  category: string;
+  description: string;
+  expense_amount: string;
   date: string | null;
-  "expense amount": string | null;
-  "rebate amount": string | null;
+  rebate_amount: string | null;
   card: string | null;
-  category: string | null;
-  description: string | null;
-}
+};
 
 export interface FileDataItem {
   [key: string]: string;

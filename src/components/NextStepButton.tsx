@@ -25,8 +25,6 @@ const NextStepButton: React.FC<NextStepButtonProps> = ({
     return WIZARD_STEP_ORDER[WIZARD_STEPS[currentStep].order];
   }, [currentStep]);
 
-  const hasLoading = WIZARD_STEPS[nextStep].hasLoadingTransition;
-
   return (
     <div className="submit-container">
       <button
@@ -34,7 +32,7 @@ const NextStepButton: React.FC<NextStepButtonProps> = ({
         className="submit-button"
         onClick={() => {
           dispatch({ type: "SET_CURRENT_STEP", payload: nextStep });
-          navigate(hasLoading ? "/loading" : WIZARD_STEPS[nextStep].url);
+          navigate(WIZARD_STEPS[nextStep].url);
         }}
         disabled={isDisabled}
       >

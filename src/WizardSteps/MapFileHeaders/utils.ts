@@ -1,36 +1,36 @@
-import type { SettingsState } from "../../store/types";
+import type { FileState } from "../../store/types";
 import type { FileHeaderRole } from "../../store/types";
 
 export const requiredRoles: (keyof FileHeaderRole)[] = [
-  "expense amount",
+  "expense_amount",
   "category",
   "description",
 ];
 
 export const allRoles: (keyof FileHeaderRole)[] = [
   "date",
-  "expense amount",
+  "expense_amount",
   "category",
   "description",
-  "rebate amount",
+  "rebate_amount",
   "card",
 ];
 
-export const isRoleMapped = (settings: SettingsState, header: string) => {
-  return Object.values(settings.fileHeaderRoles).includes(header);
+export const isRoleMapped = (file: FileState, header: string) => {
+  return Object.values(file.fileHeaderRoles).includes(header);
 };
 
 export const getMappedHeader = (
-  settings: SettingsState,
+  file: FileState,
   role: keyof FileHeaderRole
 ) => {
-  return settings.fileHeaderRoles[role];
+  return file.fileHeaderRoles[role];
 };
 
 export const isRequiredRole = (role: keyof FileHeaderRole) => {
   return requiredRoles.includes(role);
 };
 
-export const isNextStepDisabled = (settings: SettingsState) => {
-  return requiredRoles.some((role) => settings.fileHeaderRoles[role] === null);
+export const isNextStepDisabled = (file: FileState) => {
+  return requiredRoles.some((role) => file.fileHeaderRoles[role] === null);
 };

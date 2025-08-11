@@ -27,14 +27,6 @@ export const useExpenses = () => {
   };
 };
 
-export const useSettings = () => {
-  const { state, dispatch } = useStore();
-  return {
-    settings: state.settings,
-    dispatch,
-  };
-};
-
 export const useFile = () => {
   const { state, dispatch } = useStore();
   return {

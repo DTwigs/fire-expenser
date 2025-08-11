@@ -3,7 +3,6 @@ export type WizardStep = {
   title: string;
   description: string;
   showStepHeader: boolean;
-  hasLoadingTransition: boolean;
   order: number;
   icon: string;
   color: string;
