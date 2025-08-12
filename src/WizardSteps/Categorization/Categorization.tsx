@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import LoadingTransition from "../../components/LoadingTransition";
-import { useFile, useExpenses } from "../../store";
+import { useFile, useExpenses, type CategorizedExpenseItem } from "../../store";
 import { UPDATE_CATEGORIZED_EXPENSES } from "../../reducers/actions";
 import { convertToRawExpenses, categorizeItems } from "./utils";
+import "./Categorization.css";
 
 export const Categorization: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -16,8 +17,19 @@ export const Categorization: React.FC = () => {
 
   const categorizedItems = useMemo(
     () => categorizeItems(rawExpenses, expenses.categoryMapper),
-    [rawExpenses, expenses]
+    [rawExpenses, expenses.categoryMapper]
   );
+
+  const categorizedItemsList: CategorizedExpenseItem[] = useMemo(() => {
+    const categorizedItemsArray: CategorizedExpenseItem[] = [];
+    Array.from(categorizedItems.entries()).forEach(([category, items]) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Array.from(items.entries()).forEach(([_, item]) => {
+        categorizedItemsArray.push({ ...item, category });
+      });
+    });
+    return categorizedItemsArray;
+  }, [categorizedItems]);
 
   useEffect(() => {
     if (categorizedItems.size > 0) {
@@ -43,31 +55,28 @@ export const Categorization: React.FC = () => {
     <div>
       <h2>Categorization</h2>
       <div className="categorized-items">
-        {Array.from(categorizedItems.entries()).map(([category, items]) => (
-          <div key={category} className="category-section">
-            <h3>{category}</h3>
-            <div className="items-list">
-              {items.map((item, index) => (
-                <div key={index} className="expense-item">
-                  <div className="expense-details">
-                    <span className="amount">${item.expense_amount}</span>
-                    <span className="description">{item.description}</span>
-                    {item.categoryUnknown && (
-                      <span className="unknown-category">
-                        (Unknown category: {item.category})
-                      </span>
-                    )}
-                  </div>
-                  {item.rebate_amount && (
-                    <div className="rebate">Rebate: ${item.rebate_amount}</div>
-                  )}
-                  {item.card && <div className="card">Card: {item.card}</div>}
-                  {item.date && <div className="date">Date: {item.date}</div>}
+        <div className="items-list">
+          <div className="expense-items-wrapper">
+            {categorizedItemsList.map((item, index) => (
+              <div key={index} className="expense-item">
+                <div className="expense-details">
+                  <span className="amount">
+                    $
+                    {item.rawItem.expense_amount ??
+                      item.rawItem.rebate_amount ??
+                      "$0.00"}
+                  </span>
+                  <span className="description">
+                    {item.rawItem.description}
+                  </span>
                 </div>
-              ))}
-            </div>
+                {item.category && (
+                  <span className="category">{item.category}</span>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

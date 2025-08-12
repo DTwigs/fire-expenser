@@ -1,8 +1,8 @@
 import type {
   FileDataItem,
   FileHeaderRole,
-  CategorizedExpenseItems,
   CategoryMapper,
+  CategorizedExpenses,
 } from "../store/types";
 import type { WizardStepKey } from "../WizardSteps/types";
 import {
@@ -25,7 +25,7 @@ export type ExpensesAction =
   | { type: typeof EXPENSES_ERROR; payload: string }
   | {
       type: typeof UPDATE_CATEGORIZED_EXPENSES;
-      payload: CategorizedExpenseItems;
+      payload: CategorizedExpenses;
     }
   | {
       type: typeof UPDATE_CATEGORY_MAPPER;

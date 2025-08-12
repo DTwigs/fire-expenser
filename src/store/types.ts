@@ -9,13 +9,11 @@ export interface AppState {
 
 export type CategoryMapKey = string;
 export type CategoryMapper = Map<string, CategoryMapKey>;
-export type CategorizedExpenseItems = Map<
-  CategoryMapKey,
-  CategorizedExpenseItem[]
->;
+export type CategorizedExpenseItems = Map<string, CategorizedExpenseItem>;
+export type CategorizedExpenses = Map<CategoryMapKey, CategorizedExpenseItems>;
 
 export interface ExpensesState {
-  categorizedItems: CategorizedExpenseItems;
+  categorizedItems: CategorizedExpenses;
   categoryMapper: CategoryMapper;
   error: string | null;
 }
@@ -41,13 +39,9 @@ export type RawExpenseItem = {
 };
 
 export type CategorizedExpenseItem = {
-  expense_amount: string;
-  category: string;
-  description: string;
-  rebate_amount?: string | null;
-  card?: string | null;
-  date?: string | null;
-  tags?: string[] | null;
+  id: string;
+  rawItem: RawExpenseItem;
+  category?: string;
   categoryUnknown: boolean;
 };
 

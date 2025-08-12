@@ -2,11 +2,12 @@ import {
   type RawExpenseItem,
   type FileDataItem,
   type FileHeaderRole,
-  type CategorizedExpenseItem,
   type CategoryMapper,
   type CategorizedExpenseItems,
+  type CategorizedExpenses,
 } from "../../store";
 import { CATEGORY_KEY_WORDS, CATEGORY_NAMES } from "./constants";
+import { generateGuid } from "../../utils/common";
 
 export const convertToRawExpenses = (
   fileData: FileDataItem[],
@@ -38,8 +39,8 @@ export const convertToRawExpenses = (
 export const categorizeItems = (
   rawExpenses: RawExpenseItem[],
   categoryMapper: CategoryMapper
-): CategorizedExpenseItems => {
-  const categorizedItems: CategorizedExpenseItems = new Map();
+): CategorizedExpenses => {
+  const categorizedItems: CategorizedExpenses = new Map();
   let categoryName: string = CATEGORY_NAMES.Misc;
   let categoryUnknown: boolean = false;
 
@@ -52,11 +53,14 @@ export const categorizeItems = (
       categoryUnknown = unknown;
     }
 
-    const categoryItems = categorizedItems.get(categoryName) ?? [];
-    categoryItems.push({
-      ...expense,
+    const categoryItems: CategorizedExpenseItems =
+      categorizedItems.get(categoryName) ?? new Map();
+    const guid = generateGuid();
+    categoryItems.set(guid, {
+      id: guid,
+      rawItem: expense,
       categoryUnknown,
-    } as CategorizedExpenseItem);
+    });
 
     categorizedItems.set(categoryName, categoryItems);
   });
