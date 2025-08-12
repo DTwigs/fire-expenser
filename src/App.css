@@ -1,3 +1,6 @@
+@import url("./colors.css");
+@import url("./fonts.css");
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,32 +8,19 @@
   text-align: center;
 }
 
+.file-upload-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 0px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .logo.react {
-    animation: logo-spin infinite 20s linear;
-  }
 }
 
 .card {
@@ -47,8 +37,8 @@
 }
 
 .submit-button {
-  background-color: #4caf50;
-  color: white;
+  background-color: var(--color-background-tint);
+  color: var(--color-text);
   border: none;
   padding: 12px 32px;
   border-radius: 6px;
@@ -60,7 +50,8 @@
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #45a049;
+  background-color: var(--color-text);
+  color: var(--color-background);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

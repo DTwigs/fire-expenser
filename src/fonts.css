@@ -1,0 +1,36 @@
+/* Font Imports */
+@font-face {
+  font-family: "LcdPhone";
+  src: url("./assets/fonts/LcdPhone-wgZ2.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SpaceMono";
+  src: url("./assets/fonts/SpaceMono-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Font Family Variables */
+:root {
+  --font-lcd-phone: "LcdPhone", monospace;
+  --font-space-mono: "SpaceMono", monospace;
+  --font-system: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* Font Utility Classes */
+.font-lcd-phone {
+  font-family: var(--font-lcd-phone);
+}
+
+.font-space-mono {
+  font-family: var(--font-space-mono);
+}
+
+.font-system {
+  font-family: var(--font-system);
+}

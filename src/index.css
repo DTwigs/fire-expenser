@@ -1,11 +1,14 @@
+@import url("./colors.css");
+@import url("./fonts.css");
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-space-mono);
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: var(--color-text);
+  background-color: var(--color-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,8 +33,10 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-family: var(--font-lcd-phone);
+  font-size: 1.8em;
+  line-height: 1.8em;
+  letter-spacing: 0.05em;
 }
 
 button {

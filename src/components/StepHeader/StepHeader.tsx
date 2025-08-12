@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
 import { useWizard } from "../../store";
 import { WIZARD_STEP_ORDER, WIZARD_STEPS } from "../../WizardSteps/constants";
-import "./StepHeader.css";
 import type { WizardStepKey } from "../../WizardSteps/types";
+import "./StepHeader.css";
 
 const StepHeader: React.FC = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const StepHeader: React.FC = () => {
                 <Icon
                   path={step.icon}
                   size={1.2}
-                  color={isCurrentStep ? "#2196F3" : step.color}
+                  className={isCurrentStep ? "icon-current" : "icon-default"}
                 />
                 <span
                   className={

@@ -1,12 +1,10 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import Icon from "@mdi/react";
-import { mdiCurrencyUsd } from "@mdi/js";
 import { parseCSV } from "../../utils/fileManagement";
 import { useFile, useWizard, type FileDataItem } from "../../store";
 import DragAndDropFileInput from "../../components/DragAndDropFileInput/DragAndDropFileInput";
 import NextStepButton from "../../components/NextStepButton";
-import "./FileUpload.css";
 import { WIZARD_STEP_KEYS } from "../constants";
+import "./FileUpload.css";
 
 export const FileUpload: React.FC = () => {
   const { dispatch: dispatchWizard } = useWizard();
@@ -67,9 +65,6 @@ export const FileUpload: React.FC = () => {
 
   return (
     <div className="file-upload-container">
-      <h1>
-        <Icon path={mdiCurrencyUsd} size={1.5} color="#4CAF50" /> FIRE Expenser
-      </h1>
       <h2>Upload CSV File</h2>
       <p>Upload your bank statement or expense CSV file to get started.</p>
       <DragAndDropFileInput

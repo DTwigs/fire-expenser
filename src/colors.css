@@ -1,0 +1,138 @@
+/* CSS Variables for Colors */
+:root {
+  /* Primary Colors */
+  --color-primary: #17a398;
+  --color-secondary: #eb5c68;
+  --color-tertiary: #448fda;
+
+  /* Text Colors */
+  --color-text: #353249;
+  --color-light-text: #232130;
+
+  /* Background Colors */
+  --color-background: #efe9e7;
+  --color-background-tint: #d6c7c2;
+
+  /* Icon Colors */
+  --color-icon: #232130;
+  --color-tab-icon-default: #353249;
+  --color-tab-icon-selected: #17a398;
+}
+
+/* Background Color Classes */
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.bg-tertiary {
+  background-color: var(--color-tertiary);
+}
+
+.bg-background {
+  background-color: var(--color-background);
+}
+
+.bg-background-tint {
+  background-color: var(--color-background-tint);
+}
+
+/* Text Color Classes */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.text-tertiary {
+  color: var(--color-tertiary);
+}
+
+.text-default {
+  color: var(--color-text);
+}
+
+.text-light {
+  color: var(--color-light-text);
+}
+
+/* Icon Color Classes */
+.icon-default {
+  color: var(--color-icon);
+}
+
+.icon-primary {
+  color: var(--color-primary);
+}
+
+.tab-icon-default {
+  color: var(--color-tab-icon-default);
+}
+
+.tab-icon-selected {
+  color: var(--color-tab-icon-selected);
+}
+
+/* Border Color Classes */
+.border-primary {
+  border-color: var(--color-primary);
+}
+
+.border-secondary {
+  border-color: var(--color-secondary);
+}
+
+.border-tertiary {
+  border-color: var(--color-tertiary);
+}
+
+.border-background-tint {
+  border-color: var(--color-background-tint);
+}
+
+/* Fill Color Classes (for SVGs) */
+.fill-primary {
+  fill: var(--color-primary);
+}
+
+.fill-secondary {
+  fill: var(--color-secondary);
+}
+
+.fill-tertiary {
+  fill: var(--color-tertiary);
+}
+
+.fill-text {
+  fill: var(--color-text);
+}
+
+.fill-light-text {
+  fill: var(--color-light-text);
+}
+
+/* Stroke Color Classes (for SVGs) */
+.stroke-primary {
+  stroke: var(--color-primary);
+}
+
+.stroke-secondary {
+  stroke: var(--color-secondary);
+}
+
+.stroke-tertiary {
+  stroke: var(--color-tertiary);
+}
+
+.stroke-text {
+  stroke: var(--color-text);
+}
+
+.stroke-light-text {
+  stroke: var(--color-light-text);
+}
