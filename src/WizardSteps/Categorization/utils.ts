@@ -59,6 +59,7 @@ export const categorizeItems = (
     categoryItems.set(guid, {
       id: guid,
       rawItem: expense,
+      category: categoryName,
       categoryUnknown,
     });
 

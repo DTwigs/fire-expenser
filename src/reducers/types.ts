@@ -3,6 +3,7 @@ import type {
   FileHeaderRole,
   CategoryMapper,
   CategorizedExpenses,
+  CategorizedExpenseItem,
 } from "../store/types";
 import type { WizardStepKey } from "../WizardSteps/types";
 import {
@@ -14,6 +15,7 @@ import {
   SET_FURTHEST_STEP,
   UPDATE_CATEGORY_MAPPER,
   UPDATE_CATEGORIZED_EXPENSES,
+  SWAP_CATEGORIZED_EXPENSE,
   UPDATE_FILE_HEADER_ROLES,
   UPDATE_SINGLE_HEADER_ROLE,
 } from "./actions";
@@ -30,6 +32,14 @@ export type ExpensesAction =
   | {
       type: typeof UPDATE_CATEGORY_MAPPER;
       payload: CategoryMapper;
+    }
+  | {
+      type: typeof SWAP_CATEGORIZED_EXPENSE;
+      payload: {
+        originCategory: string;
+        newCategory: string;
+        expense: CategorizedExpenseItem;
+      };
     };
 
 export type FileAction =
