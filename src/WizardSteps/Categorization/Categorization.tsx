@@ -3,10 +3,13 @@ import LoadingTransition from "../../components/LoadingTransition";
 import { useFile, useExpenses } from "../../store";
 import { UPDATE_CATEGORIZED_EXPENSES } from "../../reducers/actions";
 import { convertToRawExpenses, categorizeItems } from "./utils";
-import { mdiArchive } from "@mdi/js";
+import { mdiTag } from "@mdi/js";
 import { Icon } from "@mdi/react";
 import { Colors } from "../../constants/colors";
 import "./Categorization.css";
+import { WIZARD_STEP_KEYS } from "../constants";
+import NextStepButton from "../../components/NextStepButton";
+import { CATEGORY_NAMES } from "./constants";
 
 export const Categorization: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -41,44 +44,52 @@ export const Categorization: React.FC = () => {
   }
 
   return (
-    <div>
+    <section>
       <h2>Categorize Your Expenses</h2>
       <div className="categorized-items">
         <div className="category-wrapper">
-          {Array.from(categorizedItems.keys()).map((key, index) => (
-            <div className="category-group">
-              <div className="category">
-                <Icon
-                  path={mdiArchive}
-                  size={0.8}
-                  className="category-icon"
-                  color={Colors[`category${index}`] ?? Colors.lightText}
-                />
-                {key}
-              </div>
-              <div className="expense-items-wrapper" key={key}>
-                {Array.from(categorizedItems.get(key)?.values() ?? []).map(
-                  (item) => (
-                    <div key={item.id} className="expense-item">
-                      <div className="expense-details">
-                        <span className="amount">
-                          $
-                          {item.rawItem.expense_amount ??
-                            item.rawItem.rebate_amount ??
-                            "$0.00"}
-                        </span>
-                        <span className="description">
-                          {item.rawItem.description}
-                        </span>
+          {Array.from(categorizedItems.keys())
+            .sort((a, b) => (a === "Unknown" ? -1 : b === "Unknown" ? 1 : 0))
+            .map((key, index) => (
+              <section className="category-group">
+                <div className="category">
+                  <Icon
+                    path={mdiTag}
+                    size={0.8}
+                    className="category-icon"
+                    color={Colors[`category${index}`] ?? Colors.lightText}
+                  />
+                  {key}
+                </div>
+                <div className="expense-items-wrapper" key={key}>
+                  {Array.from(categorizedItems.get(key)?.values() ?? []).map(
+                    (item) => (
+                      <div key={item.id} className="expense-item">
+                        <div className="expense-details">
+                          <span className="amount">
+                            $
+                            {item.rawItem.expense_amount ??
+                              item.rawItem.rebate_amount ??
+                              "$0.00"}
+                          </span>
+                          <span className="description">
+                            {item.rawItem.description}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-          ))}
+                    )
+                  )}
+                </div>
+              </section>
+            ))}
         </div>
       </div>
-    </div>
+      <NextStepButton
+        currentStep={WIZARD_STEP_KEYS.CATEGORIZATION}
+        isDisabled={
+          (categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ?? 0) > 0
+        }
+      />
+    </section>
   );
 };

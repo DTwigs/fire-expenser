@@ -30,7 +30,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     description: "Map your file headers to the correct fields",
     showStepHeader: true,
     order: 2,
-    icon: mdiTag,
+    icon: mdiArchive,
   },
   CATEGORIZATION: {
     url: "/categorization",
@@ -38,7 +38,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     description: "Categorize your expenses",
     showStepHeader: true,
     order: 3,
-    icon: mdiArchive,
+    icon: mdiTag,
   },
   OUTPUT: {
     url: "/output",

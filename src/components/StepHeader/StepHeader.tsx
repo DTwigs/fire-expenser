@@ -20,7 +20,7 @@ const StepHeader: React.FC = () => {
   };
 
   return (
-    <div className="step-header-wrapper">
+    <nav className="step-header-wrapper">
       <div className="step-header-container">
         {Object.entries(WIZARD_STEPS).map(([key, step]) => {
           const isCurrentStep = step.order === WIZARD_STEPS[currentStep].order;
@@ -64,7 +64,7 @@ const StepHeader: React.FC = () => {
           );
         })}
       </div>
-    </div>
+    </nav>
   );
 };
 

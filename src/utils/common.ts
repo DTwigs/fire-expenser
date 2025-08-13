@@ -5,3 +5,7 @@ export const generateGuid = (): string => {
     return v.toString(16);
   });
 };
+
+export const capitalizeString = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};

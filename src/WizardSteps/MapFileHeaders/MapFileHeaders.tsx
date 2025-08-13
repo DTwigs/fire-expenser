@@ -1,16 +1,11 @@
 import React, { useCallback, useState } from "react";
 import NextStepButton from "../../components/NextStepButton";
 import { useFile } from "../../store";
-import "./MapFileHeaders.css";
-import {
-  allRoles,
-  getMappedHeader,
-  isNextStepDisabled,
-  isRequiredRole,
-  isRoleMapped,
-} from "./utils";
+import { allRoles, isNextStepDisabled, isRoleMapped } from "./utils";
 import type { FileHeaderRole } from "../../store/types";
 import { WIZARD_STEP_KEYS } from "../constants";
+import { HeaderRole } from "./HeaderRole";
+import "./MapFileHeaders.css";
 
 export const MapFileHeaders: React.FC = () => {
   const { file, dispatch } = useFile();
@@ -79,62 +74,35 @@ export const MapFileHeaders: React.FC = () => {
   );
 
   return (
-    <div className="file-headers-container">
-      <h3>Match your csv headers to their roles!</h3>
+    <section className="file-headers-container">
+      <h3>Match your csv headers to their roles</h3>
 
       {/* File Header Roles */}
-      <div className="header-roles-section">
+      <section className="header-roles-section">
         <h4>File Header Roles</h4>
         <div className="header-roles-container">
           {allRoles.map((role) => (
             <div
               key={role}
-              className={`header-role ${
-                isRequiredRole(role) ? "required" : "optional"
-              } ${dragOverRole === role ? "drag-over" : ""}`}
               onDragOver={handleDragOver}
               onDragEnter={(e) => handleDragEnter(e, role)}
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, role)}
             >
-              <div className="role-label">
-                {role
-                  .split("_")
-                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                  .join(" ")}
-                {isRequiredRole(role) && (
-                  <span className="required-mark">*</span>
-                )}
-              </div>
-              <div className="mapped-header">
-                {getMappedHeader(file, role) ? (
-                  <div className="mapped-header-content">
-                    <span>{getMappedHeader(file, role)}</span>
-                    <button
-                      className="remove-mapping"
-                      onClick={() => handleRemoveMapping(role)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    className={`drop-zone ${
-                      dragOverRole === role ? "drag-over" : ""
-                    }`}
-                  >
-                    Drop header here
-                  </div>
-                )}
-              </div>
+              <HeaderRole
+                file={file}
+                role={role}
+                dragOverRole={dragOverRole}
+                handleRemoveMapping={handleRemoveMapping}
+              />
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* CSV Headers */}
 
-      <div className="csv-headers-section">
+      <section className="csv-headers-section">
         <h4>CSV Headers</h4>
         <p>
           We've detected the following headers in your csv file. Please drag
@@ -156,12 +124,12 @@ export const MapFileHeaders: React.FC = () => {
             );
           })}
         </div>
-      </div>
+      </section>
 
       <NextStepButton
         currentStep={WIZARD_STEP_KEYS.FILE_HEADERS}
         isDisabled={isNextStepDisabled(file)}
       />
-    </div>
+    </section>
   );
 };

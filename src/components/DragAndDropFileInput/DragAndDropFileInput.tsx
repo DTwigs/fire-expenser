@@ -89,7 +89,7 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
       />
 
       {!selectedFile ? (
-        <div className="upload-content">
+        <section className="upload-content">
           <div className="upload-icon">
             <Icon path={mdiFileUpload} size={2} />
           </div>
@@ -103,9 +103,9 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
             Browse Files
           </button>
           <p className="file-types">Supports: .csv files</p>
-        </div>
+        </section>
       ) : (
-        <div className="file-info">
+        <section className="file-info">
           <div className="file-icon">
             <Icon path={mdiFileDocument} size={1.5} />
           </div>
@@ -122,7 +122,7 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
           >
             Remove
           </button>
-        </div>
+        </section>
       )}
     </div>
   );

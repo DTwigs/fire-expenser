@@ -64,7 +64,7 @@ export const FileUpload: React.FC = () => {
   }, [dispatch, fileInputRef]);
 
   return (
-    <div className="file-upload-container">
+    <section className="file-upload-container">
       <h2>Upload CSV File</h2>
       <p>Upload your bank statement or expense CSV file to get started.</p>
       <DragAndDropFileInput
@@ -79,6 +79,6 @@ export const FileUpload: React.FC = () => {
         currentStep={WIZARD_STEP_KEYS.FILE_UPLOAD}
         isDisabled={!selectedFile && !isLoading}
       />
-    </div>
+    </section>
   );
 };
