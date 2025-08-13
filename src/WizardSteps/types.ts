@@ -5,7 +5,6 @@ export type WizardStep = {
   showStepHeader: boolean;
   order: number;
   icon: string;
-  color: string;
 };
 
 export type WizardStepKey =

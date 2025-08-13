@@ -32,5 +32,6 @@ export const isRequiredRole = (role: keyof FileHeaderRole) => {
 };
 
 export const isNextStepDisabled = (file: FileState) => {
-  return requiredRoles.some((role) => file.fileHeaderRoles[role] === null);
+  console.log({ roles: file.fileHeaderRoles });
+  return requiredRoles.some((role) => !file.fileHeaderRoles[role]);
 };

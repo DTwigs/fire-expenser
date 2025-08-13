@@ -1,10 +1,10 @@
 .upload-area {
-  border: 2px dashed #ccc;
-  border-radius: 8px;
+  border: 1px solid var(--color-background-tint);
+  border-radius: 4px;
   padding: 40px 20px;
   text-align: center;
   transition: all 0.3s ease;
-  background-color: #fafafa;
+  background-color: var(--color-background-light);
   min-height: 200px;
   display: flex;
   align-items: center;
@@ -12,58 +12,52 @@
 }
 
 .upload-area.drag-over {
-  border-color: #4caf50;
-  background-color: #f0f8f0;
+  /* border-color: var(--color-primary); */
+  background-color: var(--color-background-tint);
   transform: scale(1.02);
 }
 
 .upload-area.has-file {
-  border-color: #2196f3;
-  background-color: #f0f8ff;
+  border-color: var(--color-primary);
+  /* background-color: var(--color-background); */
 }
 
 .upload-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
 }
 
 .upload-icon {
-  color: #666;
-  margin-bottom: 8px;
+  color: var(--color-light-text);
 }
 
 .upload-content h3 {
   margin: 0;
-  color: #333;
+  color: var(--color-text);
   font-size: 18px;
 }
 
 .upload-content p {
   margin: 0;
-  color: #666;
+  color: var(--color-lighter-text);
 }
 
 .file-types {
   font-size: 12px;
-  color: #999;
+  color: var(--color-lighter-text);
 }
 
 .browse-button {
-  background-color: #4caf50;
+  background-color: var(--color-tertiary);
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: background-color 0.3s ease;
-}
-
-.browse-button:hover {
-  background-color: #45a049;
 }
 
 .file-info {
@@ -76,24 +70,23 @@
 }
 
 .file-icon {
-  color: #2196f3;
+  color: var(--color-tertiary);
   flex-shrink: 0;
 }
 
 .file-details {
   flex: 1;
-  text-align: left;
 }
 
 .file-details h4 {
   margin: 0 0 4px 0;
-  color: #333;
+  color: var(--color-light-text);
   font-size: 16px;
 }
 
 .file-details p {
   margin: 0;
-  color: #666;
+  color: var(--color-lighter-text);
   font-size: 14px;
 }
 
@@ -103,7 +96,7 @@
 }
 
 .remove-button {
-  background-color: #f44336;
+  background-color: var(--color-secondary);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -114,7 +107,7 @@
 }
 
 .remove-button:hover:not(:disabled) {
-  background-color: #d32f2f;
+  background-color: var(--color-secondary);
 }
 
 .remove-button:disabled {

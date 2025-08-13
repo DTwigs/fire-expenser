@@ -1,55 +1,71 @@
-.items-list {
-  display: flex;
-  flex-direction: column;
+.category-wrapper {
+  columns: 2;
+  column-gap: 20px;
+}
+
+.category-group {
+  break-inside: avoid-column;
+}
+
+.category-group:not(:first-child) {
+  margin-top: 20px;
 }
 
 .expense-items-wrapper {
   display: flex;
-  flex: 2;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
+  border-radius: 0 0 0 2px;
 }
 
 .expense-item {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  border: 1px solid #232130;
-  border-radius: 10px;
-  background-color: #353249;
-  color: #efe9e7;
-  overflow: hidden;
-  width: 50%;
 }
 
 .expense-details {
   display: flex;
   flex-direction: row;
-
-  width: 100%;
+  border: 1px solid var(--color-background-tint);
+  color: var(--color-text);
   flex: 5;
+  overflow: hidden;
+  border-radius: 2px;
 }
 
 .amount {
   font-size: 0.8rem;
   font-weight: bold;
   flex: 1;
-  background-color: #efe9e7;
-  border-right: 1px solid #232130;
-  color: #232130;
-  justify-content: center;
-  align-items: center;
+  background-color: var(--color-background-light);
+  color: var(--color-text);
+  padding: 3px 0;
 }
 
 .description {
-  font-size: 1rem;
-  font-weight: normal;
   flex: 4;
+  padding-left: 20px;
+  text-align: left;
+  font-size: 0.8rem;
+  line-height: 1.8rem;
+  font-weight: normal;
+  background-color: var(--color-background-tint);
 }
 
 .category {
+  display: flex;
+  align-self: flex-end;
+  align-items: center;
+  justify-content: flex-start;
+  width: auto;
   font-size: 1rem;
   font-weight: normal;
-  flex: 1;
-  background-color: #448fda;
+  background-color: var(--color-light-text);
+  padding: 4px 18px;
+  border-radius: 2px 2px 0 0;
+  color: var(--color-background);
+}
+
+.category-icon {
+  margin-right: 10px;
 }

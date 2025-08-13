@@ -1,8 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import LoadingTransition from "../../components/LoadingTransition";
-import { useFile, useExpenses, type CategorizedExpenseItem } from "../../store";
+import { useFile, useExpenses } from "../../store";
 import { UPDATE_CATEGORIZED_EXPENSES } from "../../reducers/actions";
 import { convertToRawExpenses, categorizeItems } from "./utils";
+import { mdiArchive } from "@mdi/js";
+import { Icon } from "@mdi/react";
+import { Colors } from "../../constants/colors";
 import "./Categorization.css";
 
 export const Categorization: React.FC = () => {
@@ -20,17 +23,6 @@ export const Categorization: React.FC = () => {
     [rawExpenses, expenses.categoryMapper]
   );
 
-  const categorizedItemsList: CategorizedExpenseItem[] = useMemo(() => {
-    const categorizedItemsArray: CategorizedExpenseItem[] = [];
-    Array.from(categorizedItems.entries()).forEach(([category, items]) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Array.from(items.entries()).forEach(([_, item]) => {
-        categorizedItemsArray.push({ ...item, category });
-      });
-    });
-    return categorizedItemsArray;
-  }, [categorizedItems]);
-
   useEffect(() => {
     if (categorizedItems.size > 0) {
       dispatch({
@@ -39,9 +31,6 @@ export const Categorization: React.FC = () => {
       });
     }
   }, [categorizedItems, dispatch]);
-
-  console.log({ rawExpenses });
-  console.log({ categorizedItems });
 
   const onComplete = () => {
     setLoading(false);
@@ -53,29 +42,41 @@ export const Categorization: React.FC = () => {
 
   return (
     <div>
-      <h2>Categorization</h2>
+      <h2>Categorize Your Expenses</h2>
       <div className="categorized-items">
-        <div className="items-list">
-          <div className="expense-items-wrapper">
-            {categorizedItemsList.map((item, index) => (
-              <div key={index} className="expense-item">
-                <div className="expense-details">
-                  <span className="amount">
-                    $
-                    {item.rawItem.expense_amount ??
-                      item.rawItem.rebate_amount ??
-                      "$0.00"}
-                  </span>
-                  <span className="description">
-                    {item.rawItem.description}
-                  </span>
-                </div>
-                {item.category && (
-                  <span className="category">{item.category}</span>
+        <div className="category-wrapper">
+          {Array.from(categorizedItems.keys()).map((key, index) => (
+            <div className="category-group">
+              <div className="category">
+                <Icon
+                  path={mdiArchive}
+                  size={0.8}
+                  className="category-icon"
+                  color={Colors[`category${index}`] ?? Colors.lightText}
+                />
+                {key}
+              </div>
+              <div className="expense-items-wrapper" key={key}>
+                {Array.from(categorizedItems.get(key)?.values() ?? []).map(
+                  (item) => (
+                    <div key={item.id} className="expense-item">
+                      <div className="expense-details">
+                        <span className="amount">
+                          $
+                          {item.rawItem.expense_amount ??
+                            item.rawItem.rebate_amount ??
+                            "$0.00"}
+                        </span>
+                        <span className="description">
+                          {item.rawItem.description}
+                        </span>
+                      </div>
+                    </div>
+                  )
                 )}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -24,6 +24,7 @@ export const CATEGORY_NAMES: Record<string, string> = {
   Misc: "Misc",
   Travel: "Travel",
   CC_Rewards: "CC Rewards",
+  Unknown: "Unknown",
 };
 
 export const CATEGORY_KEY_WORDS: Record<string, string> = {
@@ -34,7 +35,6 @@ export const CATEGORY_KEY_WORDS: Record<string, string> = {
   "gas/automotive": CATEGORY_NAMES.Gas_Car,
   entertainment: CATEGORY_NAMES.Entertainment,
   "other services": CATEGORY_NAMES.Charity,
-  merchandise: CATEGORY_NAMES.Misc,
   "other travel": CATEGORY_NAMES.Travel,
   lodging: CATEGORY_NAMES.Travel,
   "payment/credit": CATEGORY_NAMES.CC_Rewards,

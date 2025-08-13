@@ -97,7 +97,7 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
           <p>or</p>
           <button
             type="button"
-            className="browse-button"
+            className="browse-button button"
             onClick={handleBrowseClick}
           >
             Browse Files
@@ -116,7 +116,7 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
           </div>
           <button
             type="button"
-            className="remove-button"
+            className="remove-button button"
             onClick={handleRemoveFile}
             disabled={isLoading}
           >

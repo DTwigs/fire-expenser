@@ -1,4 +1,4 @@
-import { mdiChartLine, mdiFileUpload, mdiTagMultiple } from "@mdi/js";
+import { mdiChartLine, mdiFileUpload, mdiTag, mdiArchive } from "@mdi/js";
 import type { WizardStep, WizardStepKey } from "./types";
 
 export const WIZARD_STEP_KEYS: Record<WizardStepKey, WizardStepKey> = {
@@ -23,7 +23,6 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     showStepHeader: true,
     order: 1,
     icon: mdiFileUpload,
-    color: "#FF9800",
   },
   FILE_HEADERS: {
     url: "/file-headers",
@@ -31,17 +30,15 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     description: "Map your file headers to the correct fields",
     showStepHeader: true,
     order: 2,
-    icon: mdiTagMultiple,
-    color: "#2196F3",
+    icon: mdiTag,
   },
   CATEGORIZATION: {
     url: "/categorization",
-    title: "Categorization",
+    title: "Categorize",
     description: "Categorize your expenses",
     showStepHeader: true,
     order: 3,
-    icon: mdiTagMultiple,
-    color: "#2196F3",
+    icon: mdiArchive,
   },
   OUTPUT: {
     url: "/output",
@@ -50,6 +47,5 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     showStepHeader: true,
     order: 4,
     icon: mdiChartLine,
-    color: "#2196F3",
   },
 };

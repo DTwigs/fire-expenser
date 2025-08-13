@@ -1,19 +1,21 @@
-.file-upload-container {
+.file-headers-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.file-upload-container h2 {
+.file-headers-container h3 {
   text-align: center;
-  color: #333;
-  margin-bottom: 10px;
+  color: var(--color-light-text);
+  margin-bottom: 40px;
 }
 
-.file-upload-container p {
+.file-headers-container p {
   text-align: center;
-  color: #666;
+  color: var(--color-lighter-text);
   margin-bottom: 30px;
+  font-size: 0.8em;
+  width: 50%;
 }
 
 /* Header Roles Section */
@@ -22,7 +24,7 @@
 }
 
 .header-roles-section h3 {
-  color: #333;
+  color: var(--color-light-text);
   margin-bottom: 15px;
   font-size: 1.2em;
 }
@@ -35,47 +37,47 @@
 }
 
 .header-role {
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid var(--color-background-light);
+  border-radius: 4px;
   padding: 15px;
   min-width: 150px;
-  background: #f9f9f9;
+  background: var(--color-background-light);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .header-role.required {
-  border-color: #4ecdc4;
-  background: #f0fffd;
+  border-color: var(--color-tertiary);
+  border-color: var(--color-background-tint);
 }
 
 .header-role.optional {
-  border-color: #ccc;
-  background: #fff;
+  border-color: var(--color-background-tint);
+  background: var(--color-background-light);
 }
 
 .header-role:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-role.drag-over {
-  border-color: #4ecdc4;
-  background: #e8f5f5;
+  border-color: var(--color-tertiary);
+  background: var(--color-background-light);
   transform: scale(1.05);
 }
 
 .role-label {
   font-weight: bold;
   margin-bottom: 10px;
-  color: #333;
+  color: var(--color-text);
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
 .required-mark {
-  color: #ff6b6b;
+  color: var(--color-secondary);
   font-weight: bold;
   font-size: 1.2em;
 }
@@ -90,10 +92,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #4ecdc4;
-  color: white;
+  background: var(--color-tertiary);
+  color: var(--color-background-light);
   padding: 8px 12px;
-  border-radius: 6px;
+  border-radius: 4px;
   width: 100%;
   font-size: 0.9em;
 }
@@ -101,7 +103,7 @@
 .remove-mapping {
   background: none;
   border: none;
-  color: white;
+  color: var(--color-background-light);
   font-size: 1.2em;
   cursor: pointer;
   padding: 0;
@@ -110,37 +112,39 @@
 }
 
 .remove-mapping:hover {
-  color: #ff6b6b;
+  color: var(--color-text);
 }
 
 .drop-zone {
   width: 100%;
   height: 40px;
-  border: 2px dashed #ccc;
-  border-radius: 6px;
+  border: 1px dashed var(--color-background-tint);
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
-  font-size: 0.9em;
-  background: #fafafa;
+  color: var(--color-lighter-text);
+  font-size: 0.7em;
+  background: var(--color-background);
 }
 
 .drop-zone.drag-over {
-  border-color: #4ecdc4;
-  background: #e8f5f5;
-  color: #4ecdc4;
+  border-color: var(--color-tertiary);
+  background: var(--color-background-tint);
+  /* color: var(--color-tertiary); */
 }
 
 /* CSV Headers Section */
 .csv-headers-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 40px;
 }
 
-.csv-headers-section h3 {
-  color: #333;
-  margin-bottom: 15px;
-  font-size: 1.2em;
+.csv-headers-section h4 {
+  color: var(--color-light-text);
+  margin: 0;
 }
 
 .csv-headers-container {
@@ -151,19 +155,14 @@
 }
 
 .csv-header {
-  background: #4ecdc4;
-  color: white;
+  background: var(--color-tertiary);
+  color: var(--color-background-light);
   padding: 10px 15px;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: grab;
-  transition: all 0.3s ease;
+  /* transition: all 0.3s ease; */
   font-size: 0.9em;
   user-select: none;
-}
-
-.csv-header:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .csv-header:active {
@@ -171,7 +170,7 @@
 }
 
 .csv-header.mapped {
-  background: #95a5a6;
+  background: var(--color-background-tint);
   cursor: not-allowed;
   opacity: 0.6;
 }

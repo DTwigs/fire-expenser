@@ -79,12 +79,12 @@ export const MapFileHeaders: React.FC = () => {
   );
 
   return (
-    <div className="file-upload-container">
-      <h2>Match your csv headers to their roles!</h2>
+    <div className="file-headers-container">
+      <h3>Match your csv headers to their roles!</h3>
 
       {/* File Header Roles */}
       <div className="header-roles-section">
-        <h3>File Header Roles</h3>
+        <h4>File Header Roles</h4>
         <div className="header-roles-container">
           {allRoles.map((role) => (
             <div
@@ -98,7 +98,10 @@ export const MapFileHeaders: React.FC = () => {
               onDrop={(e) => handleDrop(e, role)}
             >
               <div className="role-label">
-                {role.charAt(0).toUpperCase() + role.slice(1)}
+                {role
+                  .split("_")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")}
                 {isRequiredRole(role) && (
                   <span className="required-mark">*</span>
                 )}
@@ -132,11 +135,11 @@ export const MapFileHeaders: React.FC = () => {
       {/* CSV Headers */}
 
       <div className="csv-headers-section">
-        <h3>CSV Headers</h3>
+        <h4>CSV Headers</h4>
         <p>
           We've detected the following headers in your csv file. Please drag
-          them to their corresponding function. The fields marked with * are
-          required.
+          them to their corresponding function. The fields marked with
+          <span className="text-secondary"> *</span> are required.
         </p>
         <div className="csv-headers-container">
           {file.headers.map((header, index) => {
@@ -144,7 +147,7 @@ export const MapFileHeaders: React.FC = () => {
             return (
               <div
                 key={index}
-                className={`csv-header ${isMapped ? "mapped" : ""}`}
+                className={`button csv-header ${isMapped ? "mapped" : ""}`}
                 draggable={!isMapped}
                 onDragStart={(e) => handleDragStart(e, header)}
               >

@@ -41,7 +41,7 @@ export const categorizeItems = (
   categoryMapper: CategoryMapper
 ): CategorizedExpenses => {
   const categorizedItems: CategorizedExpenses = new Map();
-  let categoryName: string = CATEGORY_NAMES.Misc;
+  let categoryName: string = CATEGORY_NAMES.Unknown;
   let categoryUnknown: boolean = false;
 
   rawExpenses.forEach((expense) => {
@@ -76,13 +76,13 @@ const findCategory = (
 
   if (lowerCaseCat in categoryMapper) {
     return {
-      category: categoryMapper.get(lowerCaseCat) ?? CATEGORY_NAMES.Misc,
+      category: categoryMapper.get(lowerCaseCat) ?? CATEGORY_NAMES.Unknown,
       unknown: false,
     };
   }
 
   return {
-    category: CATEGORY_KEY_WORDS[lowerCaseCat] ?? CATEGORY_NAMES.Misc,
+    category: CATEGORY_KEY_WORDS[lowerCaseCat] ?? CATEGORY_NAMES.Unknown,
     unknown: true,
   };
 };

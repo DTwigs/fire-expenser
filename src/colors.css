@@ -6,12 +6,14 @@
   --color-tertiary: #448fda;
 
   /* Text Colors */
-  --color-text: #353249;
-  --color-light-text: #232130;
+  --color-text: #232130;
+  --color-light-text: #353249;
+  --color-lighter-text: #57527a;
 
   /* Background Colors */
   --color-background: #efe9e7;
   --color-background-tint: #d6c7c2;
+  --color-background-light: #f7f4f3;
 
   /* Icon Colors */
   --color-icon: #232130;
