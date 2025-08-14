@@ -1,4 +1,5 @@
 export const CATEGORY_NAMES: Record<string, string> = {
+  Unknown: "Unknown",
   Housing: "Housing",
   Phone: "Phone",
   Electric: "Electric",
@@ -24,7 +25,6 @@ export const CATEGORY_NAMES: Record<string, string> = {
   Misc: "Misc",
   Travel: "Travel",
   CC_Rewards: "CC Rewards",
-  Unknown: "Unknown",
 };
 
 export const CATEGORY_KEY_WORDS: Record<string, string> = {

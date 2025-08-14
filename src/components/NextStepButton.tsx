@@ -12,11 +12,13 @@ import { useWizard } from "../store";
 type NextStepButtonProps = {
   currentStep: keyof typeof WIZARD_STEP_KEYS;
   isDisabled: boolean;
+  className?: string;
 };
 
 const NextStepButton: React.FC<NextStepButtonProps> = ({
   currentStep,
   isDisabled,
+  className,
 }) => {
   const { dispatch } = useWizard();
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ const NextStepButton: React.FC<NextStepButtonProps> = ({
   }, [currentStep]);
 
   return (
-    <div className="submit-container">
+    <div className={`submit-container ${className ?? ""}`}>
       <button
         type="button"
         className="submit-button"

@@ -32,6 +32,10 @@ body {
   min-height: 100vh;
 }
 
+body * {
+  box-sizing: border-box;
+}
+
 h1 {
   font-family: var(--font-lcd-phone);
   font-size: 1.8em;

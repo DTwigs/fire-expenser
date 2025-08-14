@@ -21,23 +21,23 @@ export const expensesReducer = (
       const { originCategory, newCategory, expense } = action.payload;
       const categorizedItems = new Map(state.categorizedItems);
 
-      console.log({
-        originCategory,
-        newCategory,
-        catItems: categorizedItems.get(originCategory),
-        idToRemove: expense.id,
-      });
       categorizedItems.get(originCategory)?.delete(expense.id);
-      console.log({ afterDelete: categorizedItems.get(originCategory) });
 
       const newCategoryItems = categorizedItems.get(newCategory);
+      const updatedExpense = { ...expense, category: newCategory };
+
       if (!newCategoryItems) {
-        categorizedItems.set(newCategory, new Map([[expense.id, expense]]));
+        categorizedItems.set(
+          newCategory,
+          new Map([[expense.id, updatedExpense]])
+        );
       } else {
-        newCategoryItems.set(expense.id, expense);
+        newCategoryItems.set(expense.id, updatedExpense);
       }
 
-      // console.log({ categorizedItems });
+      if (categorizedItems.get(originCategory)?.size === 0) {
+        categorizedItems.delete(originCategory);
+      }
 
       return {
         ...state,

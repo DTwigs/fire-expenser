@@ -1,25 +1,31 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import LoadingTransition from "../../components/LoadingTransition";
-import { useFile, useExpenses, type CategorizedExpenseItem } from "../../store";
+import {
+  useFile,
+  useExpenses,
+  type CategorizedExpenseItem,
+  type CategorizedExpenseItems,
+  type ExpensesState,
+} from "../../store";
 import {
   SWAP_CATEGORIZED_EXPENSE,
   UPDATE_CATEGORIZED_EXPENSES,
 } from "../../reducers/actions";
 import { convertToRawExpenses, categorizeItems } from "./utils";
-import { mdiTag } from "@mdi/js";
-import { Icon } from "@mdi/react";
-import { Colors } from "../../constants/colors";
 import "./Categorization.css";
 import { WIZARD_STEP_KEYS } from "../constants";
 import NextStepButton from "../../components/NextStepButton";
 import { CATEGORY_NAMES } from "./constants";
+import { mdiTag } from "@mdi/js";
+import { Colors } from "../../constants/colors";
+import Icon from "@mdi/react";
 
 export const Categorization: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { file } = useFile();
   const { expenses, dispatch } = useExpenses();
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOverCategory, setDragOverCategory] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] =
+    useState<CategorizedExpenseItem | null>(null);
 
   const rawExpenses = useMemo(
     () => convertToRawExpenses(file.data, file.fileHeaderRoles),
@@ -31,18 +37,6 @@ export const Categorization: React.FC = () => {
     [rawExpenses, expenses.categoryMapper]
   );
 
-  const startRollup = (categories: string[]) => {
-    categories.forEach((category) => {
-      const items = document.querySelectorAll(
-        `[data-category="${category}"] .expense-item`
-      );
-      items.forEach((item, index) => {
-        (item as HTMLElement).style.setProperty("--delay", `${index * 0.02}s`);
-        (item as HTMLElement).classList.add("rolling-up");
-      });
-    });
-  };
-
   useEffect(() => {
     if (calcedCategorizedItems.size > 0) {
       dispatch({
@@ -52,74 +46,16 @@ export const Categorization: React.FC = () => {
     }
   }, [calcedCategorizedItems, dispatch]);
 
-  useEffect(() => {
-    const handleGlobalDragEnd = () => {
-      setIsDragging(false);
-      setDragOverCategory(null);
-    };
+  const handleItemClick = (item: CategorizedExpenseItem) => {
+    setSelectedItem(item);
+  };
 
-    const handleGlobalDrop = (e: DragEvent) => {
-      // Only handle if the drop target is outside our component
-      const target = e.target as HTMLElement;
-      if (!target.closest(".categorized-items")) {
-        setIsDragging(false);
-        setDragOverCategory(null);
-      }
-    };
+  const handleCategoryClick = useCallback(
+    (category: string) => {
+      const item = selectedItem;
+      setSelectedItem(null);
 
-    document.addEventListener("dragend", handleGlobalDragEnd);
-    document.addEventListener("drop", handleGlobalDrop);
-
-    return () => {
-      document.removeEventListener("dragend", handleGlobalDragEnd);
-      document.removeEventListener("drop", handleGlobalDrop);
-    };
-  }, []);
-
-  const handleDragStart = useCallback(
-    (e: React.DragEvent, item: CategorizedExpenseItem) => {
-      startRollup(Array.from(expenses.categorizedItems.keys()));
-      e.dataTransfer.setData("text/json", JSON.stringify(item));
-      setIsDragging(true);
-    },
-    [expenses.categorizedItems]
-  );
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-  }, []);
-
-  const handleDragEnter = useCallback(
-    (e: React.DragEvent, category: string) => {
-      e.preventDefault();
-      setDragOverCategory(category);
-    },
-    []
-  );
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-
-    // Only clear drag state if we're actually leaving the header role
-    // Check if the related target is outside our header role
-    const currentTarget = e.currentTarget as HTMLElement;
-    const relatedTarget = e.relatedTarget as HTMLElement;
-
-    if (!currentTarget.contains(relatedTarget)) {
-      setDragOverCategory(null);
-    }
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent, category: string) => {
-      e.preventDefault();
-      setIsDragging(false);
-      setDragOverCategory(null);
-      const item = JSON.parse(
-        e.dataTransfer.getData("text/json")
-      ) as CategorizedExpenseItem;
-
-      if (item.category === category) {
+      if (!item || item.category === category) {
         return;
       }
 
@@ -132,7 +68,7 @@ export const Categorization: React.FC = () => {
         },
       });
     },
-    [dispatch]
+    [dispatch, selectedItem]
   );
 
   const onComplete = () => {
@@ -144,73 +80,145 @@ export const Categorization: React.FC = () => {
   }
 
   return (
-    <section>
+    <section className="categorization-wrapper">
       <h2>Categorize Your Expenses</h2>
-      <div className="categorized-items">
-        <div className={`category-wrapper ${isDragging ? "dragging" : ""}`}>
-          {Array.from(expenses.categorizedItems.keys())
-            .sort((a, b) => (a === "Unknown" ? -1 : b === "Unknown" ? 1 : 0))
-            .map((category, index) => (
-              <section
-                className={`category-group ${
-                  dragOverCategory === category ? "drag-over" : ""
-                }`}
-                key={category}
-                onDragOver={handleDragOver}
-                onDragEnter={(e) => handleDragEnter(e, category)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, category)}
-              >
-                <div className="category">
-                  <Icon
-                    path={mdiTag}
-                    size={0.8}
-                    className="category-icon"
-                    color={Colors[`category${index}`] ?? Colors.lightText}
-                  />
-                  {category}
-                </div>
-                <div
-                  className="expense-items-wrapper"
-                  data-category={category}
-                  key={category}
-                >
-                  {isDragging && (
-                    <div className="drop-helper-text">Drop expense here</div>
-                  )}
-                  {Array.from(
-                    expenses.categorizedItems.get(category)?.values() ?? []
-                  ).map((item) => (
-                    <div
-                      key={item.id}
-                      className="expense-item"
-                      draggable={true}
-                      onDragStart={(e) => handleDragStart(e, item)}
-                    >
-                      <div className="expense-details">
-                        <span className="amount">
-                          $
-                          {item.rawItem.expense_amount ??
-                            item.rawItem.rebate_amount ??
-                            "$0.00"}
-                        </span>
-                        <span className="description">
-                          {item.rawItem.description}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            ))}
+      <div className="transition-container">
+        <NextStepButton
+          className={selectedItem ? "selected" : ""}
+          currentStep={WIZARD_STEP_KEYS.CATEGORIZATION}
+          isDisabled={
+            (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ?? 0) >
+            0
+          }
+        />
+
+        <div
+          className={`selected-item-wrapper ${selectedItem ? "selected" : ""}`}
+        >
+          <div key={selectedItem?.id} className="expense-item">
+            <div className="expense-details">
+              <span className="amount">
+                $
+                {selectedItem?.rawItem.expense_amount ??
+                  selectedItem?.rawItem.rebate_amount ??
+                  "$0.00"}
+              </span>
+              <span className="description">
+                {selectedItem?.rawItem.description}
+              </span>
+            </div>
+          </div>
+          <span>Which category does this expense belong to?</span>
         </div>
       </div>
-      <NextStepButton
-        currentStep={WIZARD_STEP_KEYS.CATEGORIZATION}
-        isDisabled={
-          (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ?? 0) > 0
-        }
-      />
+      <div className="categorized-items">
+        <div className={`category-wrapper ${selectedItem ? "selected" : ""}`}>
+          {Object.values(CATEGORY_NAMES).map((category) => (
+            <CategoryItem
+              category={category}
+              expenses={expenses}
+              handleCategoryClick={handleCategoryClick}
+              handleItemClick={handleItemClick}
+              showEmptyCategory={!!selectedItem}
+            />
+          ))}
+        </div>
+      </div>
     </section>
+  );
+};
+
+type CategoryItemProps = {
+  category: string;
+  expenses: ExpensesState;
+  handleCategoryClick: (category: string) => void;
+  handleItemClick: (item: CategorizedExpenseItem) => void;
+  showEmptyCategory: boolean;
+};
+
+export const CategoryItem: React.FC<CategoryItemProps> = ({
+  category,
+  expenses,
+  handleCategoryClick,
+  handleItemClick,
+  showEmptyCategory,
+}) => {
+  const categoryItems: CategorizedExpenseItems | undefined =
+    expenses.categorizedItems.get(category);
+
+  if (!showEmptyCategory && (!categoryItems || categoryItems.size <= 0)) {
+    return null;
+  }
+
+  const getCategoryItems = (category: string): CategorizedExpenseItem[] => {
+    return Array.from(expenses.categorizedItems.get(category)?.values() ?? []);
+  };
+
+  return (
+    <>
+      <section className={"category-group"} key={category}>
+        <CategoryListHeader
+          category={category}
+          handleCategoryClick={handleCategoryClick}
+        />
+        <div
+          className="expense-items-wrapper"
+          data-category={category}
+          key={category}
+        >
+          {getCategoryItems(category).map((item) => (
+            <ExpenseItem
+              key={item.id}
+              item={item}
+              handleItemClick={handleItemClick}
+            />
+          ))}
+        </div>
+      </section>
+    </>
+  );
+};
+
+type ExpenseItemProps = {
+  item: CategorizedExpenseItem;
+  handleItemClick?: (item: CategorizedExpenseItem) => void;
+};
+
+export const ExpenseItem: React.FC<ExpenseItemProps> = ({
+  item,
+  handleItemClick,
+}) => {
+  return (
+    <div className="expense-item" onClick={() => handleItemClick?.(item)}>
+      <div className="expense-details">
+        <span className="amount">
+          $
+          {item.rawItem.expense_amount ?? item.rawItem.rebate_amount ?? "$0.00"}
+        </span>
+        <span className="description">{item.rawItem.description}</span>
+      </div>
+    </div>
+  );
+};
+
+type CategoryListHeaderProps = {
+  category: string;
+  handleCategoryClick: (category: string) => void;
+};
+
+export const CategoryListHeader: React.FC<CategoryListHeaderProps> = ({
+  category,
+  handleCategoryClick,
+}) => {
+  return (
+    <div className="category" onClick={() => handleCategoryClick(category)}>
+      <Icon
+        path={mdiTag}
+        size={0.68}
+        className="category-icon"
+        color={Colors.backgroundTint}
+      />
+      {category}
+    </div>
   );
 };

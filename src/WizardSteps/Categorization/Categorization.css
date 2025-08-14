@@ -1,12 +1,107 @@
+:root {
+  --transition-time: 0.4s;
+}
+
+@keyframes selectedItemRollUp {
+  from {
+    height: 64px;
+    gap: 10px;
+  }
+  to {
+    height: 0;
+    gap: 0;
+  }
+}
+
+@keyframes selectedItemRollDown {
+  from {
+    height: 0;
+    gap: 0;
+  }
+  to {
+    height: 64px;
+    gap: 10px;
+  }
+}
+
+@keyframes submitRollDown {
+  from {
+    transform: rotateX(90deg);
+    height: 0;
+  }
+  to {
+    transform: rotateX(0deg);
+    height: auto;
+  }
+}
+
+@keyframes submitRollUp {
+  from {
+    transform: rotateX(0deg);
+    height: auto;
+  }
+  to {
+    transform: rotateX(90deg);
+    height: 0;
+  }
+}
+
+.categorization-wrapper .submit-container {
+  margin: 0;
+  transform-origin: top;
+  transform-style: preserve-3d;
+  height: 0;
+  transform: rotateX(90deg);
+  animation: submitRollDown var(--transition-time) ease-out
+    var(--transition-time) forwards;
+}
+
+.categorization-wrapper .submit-container.selected {
+  animation: submitRollUp var(--transition-time) ease-out forwards;
+}
+
 .category-wrapper {
   columns: 2;
   column-gap: 20px;
-  /* transition: columns 0.6s ease-out 0.6s; */
+  transition: columns var(--transition-time) ease-out;
 }
 
-/* .category-wrapper.dragging {
-  columns: 3;
-} */
+.category-wrapper.selected {
+  columns: 4;
+}
+
+.transition-container {
+  height: 64px;
+  margin-bottom: 20px;
+}
+
+.selected-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  height: 0;
+  margin: 0;
+  gap: 0;
+  animation: selectedItemRollUp var(--transition-time) ease-out forwards;
+}
+
+.selected-item-wrapper.selected {
+  animation: selectedItemRollDown var(--transition-time) ease-out
+    var(--transition-time) forwards;
+}
+
+.selected-item-wrapper .expense-item,
+.selected-item-wrapper.selected .expense-item {
+  width: 50%;
+  height: 28px;
+}
+
+.selected-item-wrapper .expense-details {
+  border: 2px solid var(--color-primary);
+}
 
 .category-group {
   break-inside: avoid-column;
@@ -16,45 +111,31 @@
   margin-top: 20px;
 }
 
-.category-group.drag-over {
-  background-color: var(--color-background-tint);
-}
-
 .expense-items-wrapper {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  overflow: hidden;
+  /* overflow: hidden; */
   border-radius: 0 0 0 2px;
-  transition: gap 0.6s ease-out, border 0.2s ease-out 0.6s;
+  transition: gap 0.2s ease-out;
 }
 
-.dragging .expense-items-wrapper {
-  overflow: hidden;
+.selected .expense-items-wrapper {
+  /* overflow: hidden; */
   gap: 0;
-  border: 2px dashed var(--color-background-tint);
 }
 
 .expense-item {
-  transform-origin: top;
   position: relative;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   height: 28px;
+  transition: height 0.2s ease-out;
 }
 
-@keyframes rollup {
-  from {
-    height: 28px;
-  }
-  to {
-    height: 0;
-  }
-}
-
-.dragging .expense-item.rolling-up {
-  /* height: 0; */
-  animation: rollup 0.5s ease-out var(--delay, 0s) forwards;
+.selected .expense-item {
+  height: 0;
 }
 
 .expense-details {
@@ -67,14 +148,14 @@
   flex-direction: row;
   border: 1px solid var(--color-background-tint);
   color: var(--color-text);
-  flex: 5;
+  flex: 4;
   overflow: hidden;
   border-radius: 2px;
 }
 
 .amount {
+  font-family: monospace, sans-serif;
   font-size: 0.8rem;
-  font-weight: bold;
   flex: 1;
   background-color: var(--color-background-light);
   color: var(--color-text);
@@ -82,11 +163,11 @@
 }
 
 .description {
-  flex: 4;
-  padding-left: 20px;
+  flex: 3;
+  padding-left: 10px;
   text-align: left;
-  font-size: 0.8rem;
-  line-height: 1.8rem;
+  font-size: 0.7rem;
+  line-height: 1.5rem;
   font-weight: normal;
   background-color: var(--color-background-tint);
 }
@@ -105,39 +186,11 @@
   color: var(--color-background);
 }
 
+.selected .category {
+  border-radius: 2px;
+}
+
 .category-icon {
   margin-right: 10px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    height: 0;
-  }
-  to {
-    opacity: 1;
-    height: 60px;
-  }
-}
-
-.drop-helper-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-lighter-text);
-  text-align: center;
-  width: 100%;
-  height: 0;
-  opacity: 0;
-  height: 0;
-}
-
-.dragging .drop-helper-text {
-  width: 100%;
-  height: 0;
-  animation: fadeIn 0.4s ease-out 0.8s forwards;
-}
-
-.drag-over .drop-helper-text {
-  color: var(--color-background-light);
+  margin-top: 2px;
 }
