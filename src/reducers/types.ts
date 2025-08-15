@@ -25,6 +25,7 @@ export type AppAction = ExpensesAction | FileAction | WizardAction;
 
 export type ExpensesAction =
   | { type: typeof EXPENSES_ERROR; payload: string }
+  | { type: typeof UPDATE_CATEGORY_MAPPER; payload: CategoryMapper }
   | {
       type: typeof UPDATE_CATEGORIZED_EXPENSES;
       payload: CategorizedExpenses;
@@ -40,7 +41,8 @@ export type ExpensesAction =
         newCategory: string;
         expense: CategorizedExpenseItem;
       };
-    };
+    }
+  | { type: typeof REMOVE_FILE };
 
 export type FileAction =
   | { type: typeof ADD_FILE_HEADERS; payload: string[] }

@@ -3,7 +3,7 @@ export const CATEGORY_NAMES: Record<string, string> = {
   Housing: "Housing",
   Phone: "Phone",
   Electric: "Electric",
-  Internet: "Internet",
+  Utilities: "Utilities",
   Insurance: "Insurance",
   Groceries: "Groceries",
   Eating_Out: "Eating Out",
@@ -30,7 +30,7 @@ export const CATEGORY_NAMES: Record<string, string> = {
 export const CATEGORY_KEY_WORDS: Record<string, string> = {
   rent: CATEGORY_NAMES.Housing,
   "health care": CATEGORY_NAMES.Medical,
-  "phone/cable": CATEGORY_NAMES.Internet,
+  "phone/cable": CATEGORY_NAMES.Utilities,
   dining: CATEGORY_NAMES.Eating_Out,
   "gas/automotive": CATEGORY_NAMES.Gas_Car,
   entertainment: CATEGORY_NAMES.Entertainment,

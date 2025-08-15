@@ -13,12 +13,14 @@ type NextStepButtonProps = {
   currentStep: keyof typeof WIZARD_STEP_KEYS;
   isDisabled: boolean;
   className?: string;
+  onClick?: () => void;
 };
 
 const NextStepButton: React.FC<NextStepButtonProps> = ({
   currentStep,
   isDisabled,
   className,
+  onClick,
 }) => {
   const { dispatch } = useWizard();
   const navigate = useNavigate();
@@ -33,6 +35,7 @@ const NextStepButton: React.FC<NextStepButtonProps> = ({
         type="button"
         className="submit-button"
         onClick={() => {
+          onClick?.();
           dispatch({ type: "SET_CURRENT_STEP", payload: nextStep });
           navigate(WIZARD_STEPS[nextStep].url);
         }}

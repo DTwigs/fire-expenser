@@ -1,24 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import LoadingTransition from "../../components/LoadingTransition";
-import {
-  useFile,
-  useExpenses,
-  type CategorizedExpenseItem,
-  type CategorizedExpenseItems,
-  type ExpensesState,
-} from "../../store";
+import { useFile, useExpenses, type CategorizedExpenseItem } from "../../store";
 import {
   SWAP_CATEGORIZED_EXPENSE,
   UPDATE_CATEGORIZED_EXPENSES,
+  UPDATE_CATEGORY_MAPPER,
 } from "../../reducers/actions";
-import { convertToRawExpenses, categorizeItems } from "./utils";
-import "./Categorization.css";
+import {
+  convertToRawExpenses,
+  categorizeItems,
+  populateCategoryMapper,
+} from "./utils";
 import { WIZARD_STEP_KEYS } from "../constants";
 import NextStepButton from "../../components/NextStepButton";
 import { CATEGORY_NAMES } from "./constants";
-import { mdiTag } from "@mdi/js";
-import { Colors } from "../../constants/colors";
-import Icon from "@mdi/react";
+import { CategoryItem } from "../../components/CategoryItem";
+import "./Categorization.css";
 
 export const Categorization: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -71,6 +68,15 @@ export const Categorization: React.FC = () => {
     [dispatch, selectedItem]
   );
 
+  const handleSubmit = () => {
+    const newMapper = populateCategoryMapper(expenses);
+
+    dispatch({
+      type: UPDATE_CATEGORY_MAPPER,
+      payload: newMapper,
+    });
+  };
+
   const onComplete = () => {
     setLoading(false);
   };
@@ -90,6 +96,7 @@ export const Categorization: React.FC = () => {
             (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ?? 0) >
             0
           }
+          onClick={handleSubmit}
         />
 
         <div
@@ -125,100 +132,5 @@ export const Categorization: React.FC = () => {
         </div>
       </div>
     </section>
-  );
-};
-
-type CategoryItemProps = {
-  category: string;
-  expenses: ExpensesState;
-  handleCategoryClick: (category: string) => void;
-  handleItemClick: (item: CategorizedExpenseItem) => void;
-  showEmptyCategory: boolean;
-};
-
-export const CategoryItem: React.FC<CategoryItemProps> = ({
-  category,
-  expenses,
-  handleCategoryClick,
-  handleItemClick,
-  showEmptyCategory,
-}) => {
-  const categoryItems: CategorizedExpenseItems | undefined =
-    expenses.categorizedItems.get(category);
-
-  if (!showEmptyCategory && (!categoryItems || categoryItems.size <= 0)) {
-    return null;
-  }
-
-  const getCategoryItems = (category: string): CategorizedExpenseItem[] => {
-    return Array.from(expenses.categorizedItems.get(category)?.values() ?? []);
-  };
-
-  return (
-    <>
-      <section className={"category-group"} key={category}>
-        <CategoryListHeader
-          category={category}
-          handleCategoryClick={handleCategoryClick}
-        />
-        <div
-          className="expense-items-wrapper"
-          data-category={category}
-          key={category}
-        >
-          {getCategoryItems(category).map((item) => (
-            <ExpenseItem
-              key={item.id}
-              item={item}
-              handleItemClick={handleItemClick}
-            />
-          ))}
-        </div>
-      </section>
-    </>
-  );
-};
-
-type ExpenseItemProps = {
-  item: CategorizedExpenseItem;
-  handleItemClick?: (item: CategorizedExpenseItem) => void;
-};
-
-export const ExpenseItem: React.FC<ExpenseItemProps> = ({
-  item,
-  handleItemClick,
-}) => {
-  return (
-    <div className="expense-item" onClick={() => handleItemClick?.(item)}>
-      <div className="expense-details">
-        <span className="amount">
-          $
-          {item.rawItem.expense_amount ?? item.rawItem.rebate_amount ?? "$0.00"}
-        </span>
-        <span className="description">{item.rawItem.description}</span>
-      </div>
-    </div>
-  );
-};
-
-type CategoryListHeaderProps = {
-  category: string;
-  handleCategoryClick: (category: string) => void;
-};
-
-export const CategoryListHeader: React.FC<CategoryListHeaderProps> = ({
-  category,
-  handleCategoryClick,
-}) => {
-  return (
-    <div className="category" onClick={() => handleCategoryClick(category)}>
-      <Icon
-        path={mdiTag}
-        size={0.68}
-        className="category-icon"
-        color={Colors.backgroundTint}
-      />
-      {category}
-    </div>
   );
 };

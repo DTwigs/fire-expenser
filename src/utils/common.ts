@@ -9,3 +9,10 @@ export const generateGuid = (): string => {
 export const capitalizeString = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+export const normalizeString = (str: string) => {
+  return str
+    .replace(/[^a-zA-Z\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+};

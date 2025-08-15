@@ -5,9 +5,12 @@ import {
   type CategoryMapper,
   type CategorizedExpenseItems,
   type CategorizedExpenses,
+  type CategorizedExpenseItem,
+  type ExpensesState,
+  type NormalizedExpenseDesc,
 } from "../../store";
 import { CATEGORY_KEY_WORDS, CATEGORY_NAMES } from "./constants";
-import { generateGuid } from "../../utils/common";
+import { generateGuid, normalizeString } from "../../utils/common";
 
 export const convertToRawExpenses = (
   fileData: FileDataItem[],
@@ -42,15 +45,18 @@ export const categorizeItems = (
 ): CategorizedExpenses => {
   const categorizedItems: CategorizedExpenses = new Map();
   let categoryName: string = CATEGORY_NAMES.Unknown;
-  let categoryUnknown: boolean = false;
 
-  rawExpenses.forEach((expense) => {
-    const rawCategory = expense.category;
+  rawExpenses.forEach((rawExpense) => {
+    const rawCategory = rawExpense.category;
+    const normalizedDesc = normalizeString(rawExpense.description);
 
     if (rawCategory) {
-      const { category, unknown } = findCategory(rawCategory, categoryMapper);
+      const { category } = findCategory(
+        rawCategory,
+        categoryMapper,
+        normalizedDesc
+      );
       categoryName = category;
-      categoryUnknown = unknown;
     }
 
     const categoryItems: CategorizedExpenseItems =
@@ -58,9 +64,9 @@ export const categorizeItems = (
     const guid = generateGuid();
     categoryItems.set(guid, {
       id: guid,
-      rawItem: expense,
+      rawItem: rawExpense,
       category: categoryName,
-      categoryUnknown,
+      applyToAll: true,
     });
 
     categorizedItems.set(categoryName, categoryItems);
@@ -71,19 +77,50 @@ export const categorizeItems = (
 
 const findCategory = (
   rawCategory: string,
-  categoryMapper: CategoryMapper
-): { category: string; unknown: boolean } => {
+  categoryMapper: CategoryMapper,
+  normalizedDesc: NormalizedExpenseDesc = ""
+): { category: string } => {
   const lowerCaseCat = rawCategory.toLowerCase();
 
-  if (lowerCaseCat in categoryMapper) {
+  if (categoryMapper.has(normalizedDesc)) {
     return {
-      category: categoryMapper.get(lowerCaseCat) ?? CATEGORY_NAMES.Unknown,
-      unknown: false,
+      category: categoryMapper.get(normalizedDesc) ?? CATEGORY_NAMES.Unknown,
     };
   }
 
   return {
     category: CATEGORY_KEY_WORDS[lowerCaseCat] ?? CATEGORY_NAMES.Unknown,
-    unknown: true,
   };
+};
+
+export const normalizeExpenseItem = (
+  categoryItems: CategorizedExpenseItems
+): CategorizedExpenseItem[] => {
+  return Array.from(categoryItems.values()).map(
+    (expense: CategorizedExpenseItem) => ({
+      ...expense,
+      normalizedDescription: normalizeString(expense.rawItem.description),
+    })
+  );
+};
+
+export const populateCategoryMapper = (
+  expenses: ExpensesState
+): CategoryMapper => {
+  const newMapper: CategoryMapper = new Map(expenses.categoryMapper);
+  // populate the categoryMapper to help with future category predictions
+  Array.from(expenses.categorizedItems.entries()).forEach(
+    ([category, categoryItems]: [string, CategorizedExpenseItems]) => {
+      const normalizedExpenseItems = normalizeExpenseItem(categoryItems);
+      normalizedExpenseItems.forEach((expense: CategorizedExpenseItem) => {
+        if (!expense.normalizedDescription || !expense.applyToAll) {
+          return;
+        }
+
+        newMapper.set(expense.normalizedDescription, category);
+      });
+    }
+  );
+
+  return newMapper;
 };

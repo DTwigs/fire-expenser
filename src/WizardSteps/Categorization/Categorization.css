@@ -95,6 +95,7 @@
 
 .selected-item-wrapper .expense-item,
 .selected-item-wrapper.selected .expense-item {
+  cursor: default;
   width: 50%;
   height: 28px;
 }
@@ -132,6 +133,7 @@
   overflow: hidden;
   height: 28px;
   transition: height 0.2s ease-out;
+  cursor: pointer;
 }
 
 .selected .expense-item {
@@ -188,6 +190,14 @@
 
 .selected .category {
   border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.2s ease-out;
+}
+
+.selected .category:hover {
+  background-color: var(--color-primary);
+  color: var(--color-light-text);
+  transform: scale(1.03);
 }
 
 .category-icon {

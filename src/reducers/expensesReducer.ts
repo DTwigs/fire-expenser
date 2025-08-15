@@ -1,4 +1,11 @@
 import type { ExpensesState } from "../store/types";
+import {
+  EXPENSES_ERROR,
+  SWAP_CATEGORIZED_EXPENSE,
+  UPDATE_CATEGORY_MAPPER,
+  UPDATE_CATEGORIZED_EXPENSES,
+  REMOVE_FILE,
+} from "./actions";
 import type { ExpensesAction } from "./types";
 
 // Expenses reducer
@@ -7,17 +14,22 @@ export const expensesReducer = (
   action: ExpensesAction
 ): ExpensesState => {
   switch (action.type) {
-    case "EXPENSES_ERROR":
+    case EXPENSES_ERROR:
       return {
         ...state,
         error: action.payload,
       };
-    case "UPDATE_CATEGORIZED_EXPENSES":
+    case UPDATE_CATEGORY_MAPPER:
+      return {
+        ...state,
+        categoryMapper: action.payload,
+      };
+    case UPDATE_CATEGORIZED_EXPENSES:
       return {
         ...state,
         categorizedItems: action.payload,
       };
-    case "SWAP_CATEGORIZED_EXPENSE": {
+    case SWAP_CATEGORIZED_EXPENSE: {
       const { originCategory, newCategory, expense } = action.payload;
       const categorizedItems = new Map(state.categorizedItems);
 
@@ -44,6 +56,12 @@ export const expensesReducer = (
         categorizedItems,
       };
     }
+    case REMOVE_FILE:
+      return {
+        ...state,
+        categorizedItems: new Map(),
+        error: null,
+      };
     default:
       return state;
   }

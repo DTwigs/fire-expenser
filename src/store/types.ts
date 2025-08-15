@@ -7,10 +7,13 @@ export interface AppState {
   wizard: WizardState;
 }
 
-export type CategoryMapKey = string;
-export type CategoryMapper = Map<string, CategoryMapKey>;
-export type CategorizedExpenseItems = Map<string, CategorizedExpenseItem>;
-export type CategorizedExpenses = Map<CategoryMapKey, CategorizedExpenseItems>;
+export type ExpenseDescription = string;
+export type NormalizedExpenseDesc = ExpenseDescription;
+export type GUID = string;
+export type CategoryKey = string;
+export type CategoryMapper = Map<NormalizedExpenseDesc, CategoryKey>;
+export type CategorizedExpenseItems = Map<GUID, CategorizedExpenseItem>;
+export type CategorizedExpenses = Map<CategoryKey, CategorizedExpenseItems>;
 
 export interface ExpensesState {
   categorizedItems: CategorizedExpenses;
@@ -31,23 +34,24 @@ export type WizardState = {
 
 export type RawExpenseItem = {
   expense_amount: string;
-  category: string;
-  description: string;
+  category: CategoryKey;
+  description: ExpenseDescription;
   rebate_amount?: string | null;
   card?: string | null;
   date?: string | null;
 };
 
 export type CategorizedExpenseItem = {
-  id: string;
+  id: GUID;
   rawItem: RawExpenseItem;
-  category?: string;
-  categoryUnknown: boolean;
+  category?: CategoryKey;
+  normalizedDescription?: NormalizedExpenseDesc;
+  applyToAll: boolean;
 };
 
 export type FileHeaderRole = {
-  category: string;
-  description: string;
+  category: CategoryKey;
+  description: ExpenseDescription;
   expense_amount: string;
   date: string | null;
   rebate_amount: string | null;
