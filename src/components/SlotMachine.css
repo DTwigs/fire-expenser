@@ -1,0 +1,105 @@
+.slot-machine {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--color-background);
+}
+
+.slot-machine-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--animation-speed)
+    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.slot-machine-item {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: all var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  cursor: default;
+}
+
+.slot-machine-item--center {
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.slot-machine-item--above {
+  opacity: 0.2;
+}
+
+.slot-machine-item--below {
+  opacity: 0.2;
+}
+
+/* Fade overlays for smooth transitions */
+.slot-machine-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 40px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.slot-machine-fade--top {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-background) 0%,
+    rgba(239, 233, 231, 0.8) 50%,
+    transparent 100%
+  );
+}
+
+.slot-machine-fade--bottom {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--color-background) 0%,
+    rgba(239, 233, 231, 0.8) 50%,
+    transparent 100%
+  );
+}
+
+/* Animation for cycling effect */
+@keyframes slot-machine-cycle {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(calc(var(--item-height) * 0.5));
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(var(--item-height));
+    opacity: 0.6;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .slot-machine-item {
+    font-size: 16px;
+  }
+
+  .slot-machine-item--center {
+    font-size: 18px;
+  }
+
+  .slot-machine-fade {
+    height: 30px;
+  }
+}

@@ -2,9 +2,9 @@
 
 # FIRE EXPENSOR
 
-## Take your bank statements and quickly sum up your expenses into categories
+## Take your bank statements and sum up your expenses into categories
 
-Quickly categorize your expenses and FIRE Expensor will learn from your categorization and apply categories to your expenses automatically. Decreasing your time your budgeting takes at the end of every month.
+Quickly categorize your expenses and FIRE Expensor will learn from your categorization and apply categories to your expenses automatically. Decreasing the time your budgeting takes at the end of every month.
 
 Easily copy your categorized expenses into your budgeting spreadsheet!
 

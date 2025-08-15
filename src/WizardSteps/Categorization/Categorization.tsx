@@ -1,27 +1,36 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import LoadingTransition from "../../components/LoadingTransition";
-import { useFile, useExpenses, type CategorizedExpenseItem } from "../../store";
+import {
+  useFile,
+  useExpenses,
+  type CategorizedExpenseItem,
+  type CategoryKey,
+} from "../../store";
 import {
   SWAP_CATEGORIZED_EXPENSE,
   UPDATE_CATEGORIZED_EXPENSES,
+  UPDATE_CATEGORIZED_EXPENSE,
   UPDATE_CATEGORY_MAPPER,
 } from "../../reducers/actions";
 import {
   convertToRawExpenses,
   categorizeItems,
   populateCategoryMapper,
+  applyCategorySwapToAll,
 } from "./utils";
 import { WIZARD_STEP_KEYS } from "../constants";
 import NextStepButton from "../../components/NextStepButton";
 import { CATEGORY_NAMES } from "./constants";
 import { CategoryItem } from "../../components/CategoryItem";
 import { Checkbox } from "../../components/Checkbox";
+import { normalizeString } from "../../utils/common";
 import "./Categorization.css";
 
 export const Categorization: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { file } = useFile();
   const { expenses, dispatch } = useExpenses();
+  const [itemsSwapped, setItemsSwapped] = useState(0);
   const [selectedItem, setSelectedItem] =
     useState<CategorizedExpenseItem | null>(null);
 
@@ -48,25 +57,50 @@ export const Categorization: React.FC = () => {
     setSelectedItem(item);
   };
 
-  const handleCategoryClick = useCallback(
-    (category: string) => {
-      const item = selectedItem;
-      setSelectedItem(null);
-
-      if (!item || item.category === category) {
-        return;
-      }
-
+  const swapCategory = useCallback(
+    (item: CategorizedExpenseItem, destinationCategory: CategoryKey) => {
       dispatch({
         type: SWAP_CATEGORIZED_EXPENSE,
         payload: {
-          originCategory: item.category ?? "",
-          newCategory: category,
+          originCategory: item.category || CATEGORY_NAMES.Unknown,
+          newCategory: destinationCategory,
           expense: item,
         },
       });
     },
-    [dispatch, selectedItem]
+    [dispatch]
+  );
+
+  const handleCategoryClick = useCallback(
+    (destinationCategory: string) => {
+      const item = selectedItem;
+      setSelectedItem(null);
+
+      // if applyToAll is true, we grab all other items in the Unknown category with the same
+      // normalized description and move them to the destination category.
+      if (item?.applyToAll) {
+        const normalizedSelectedDesc = normalizeString(
+          item.rawItem.description
+        );
+        const itemsSwapped = applyCategorySwapToAll(
+          expenses.categorizedItems,
+          normalizedSelectedDesc,
+          destinationCategory,
+          swapCategory
+        );
+        setItemsSwapped(itemsSwapped);
+        setTimeout(() => {
+          setItemsSwapped(0);
+        }, 2000);
+      } else {
+        if (!item || item.category === destinationCategory) {
+          return;
+        }
+
+        swapCategory(item, destinationCategory);
+      }
+    },
+    [expenses.categorizedItems, selectedItem, swapCategory]
   );
 
   const handleSubmit = () => {
@@ -79,12 +113,20 @@ export const Categorization: React.FC = () => {
   };
 
   const handleApplyToAll = () => {
-    const { category = "", id = "" } = selectedItem ?? {};
-    expenses.categorizedItems.get(category)?.get(id);
-    // dispatch({
-    //   type: UPDATE_CATEGORIZED_EXPENSE,
-    //   payload: calcedCategorizedItems,
-    // });
+    if (!selectedItem) {
+      return;
+    }
+
+    const item = {
+      ...selectedItem,
+      applyToAll: !selectedItem.applyToAll,
+    };
+
+    setSelectedItem(item);
+    dispatch({
+      type: UPDATE_CATEGORIZED_EXPENSE,
+      payload: item,
+    });
   };
 
   const onComplete = () => {
@@ -125,6 +167,13 @@ export const Categorization: React.FC = () => {
                   </span>
                 </div>
               </div>
+              {itemsSwapped > 0 && (
+                <div className="items-swapped-container">
+                  <span>
+                    {itemsSwapped} items swapped to {selectedItem?.category}
+                  </span>
+                </div>
+              )}
               <Checkbox
                 text="Apply to all"
                 checked={selectedItem?.applyToAll ?? false}

@@ -8,6 +8,7 @@ import {
   type CategorizedExpenseItem,
   type ExpensesState,
   type NormalizedExpenseDesc,
+  type CategoryKey,
 } from "../../store";
 import { CATEGORY_KEY_WORDS, CATEGORY_NAMES } from "./constants";
 import { generateGuid, normalizeString } from "../../utils/common";
@@ -104,6 +105,9 @@ export const normalizeExpenseItem = (
   );
 };
 
+// after a user has categorized all their expenses,
+// we populate the categoryMapper with a map from a
+// normalized description to the category.
 export const populateCategoryMapper = (
   expenses: ExpensesState
 ): CategoryMapper => {
@@ -123,4 +127,38 @@ export const populateCategoryMapper = (
   );
 
   return newMapper;
+};
+
+export const getAllItemsAsArray = (
+  categorizedItems: CategorizedExpenses
+): CategorizedExpenseItem[] => {
+  return Array.from(categorizedItems.values() || new Map())
+    .map((map) => Array.from(map.values()))
+    .flat();
+};
+
+export const applyCategorySwapToAll = (
+  categorizedItems: CategorizedExpenses,
+  descriptionToMatch: NormalizedExpenseDesc,
+  destinationCategory: CategoryKey,
+  callback: (
+    item: CategorizedExpenseItem,
+    destinationCategory: CategoryKey
+  ) => void
+): number => {
+  const allItems = getAllItemsAsArray(categorizedItems);
+  let itemsSwapped = 0;
+  allItems.forEach((item) => {
+    const normalizedItemDesc =
+      item.normalizedDescription || normalizeString(item.rawItem.description);
+
+    if (descriptionToMatch !== normalizedItemDesc) {
+      return;
+    }
+
+    callback(item, destinationCategory);
+    itemsSwapped++;
+  });
+
+  return itemsSwapped;
 };

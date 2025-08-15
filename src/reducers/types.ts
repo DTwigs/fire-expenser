@@ -18,6 +18,7 @@ import {
   SWAP_CATEGORIZED_EXPENSE,
   UPDATE_FILE_HEADER_ROLES,
   UPDATE_SINGLE_HEADER_ROLE,
+  UPDATE_CATEGORIZED_EXPENSE,
 } from "./actions";
 
 // Action types
@@ -29,6 +30,10 @@ export type ExpensesAction =
   | {
       type: typeof UPDATE_CATEGORIZED_EXPENSES;
       payload: CategorizedExpenses;
+    }
+  | {
+      type: typeof UPDATE_CATEGORIZED_EXPENSE;
+      payload: CategorizedExpenseItem;
     }
   | {
       type: typeof UPDATE_CATEGORY_MAPPER;
