@@ -1,57 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import LoadingTransition from "../../components/LoadingTransition";
+import React, { useCallback, useState } from "react";
 import {
-  useFile,
   useExpenses,
   type CategorizedExpenseItem,
   type CategoryKey,
 } from "../../store";
 import {
   SWAP_CATEGORIZED_EXPENSE,
-  UPDATE_CATEGORIZED_EXPENSES,
   UPDATE_CATEGORIZED_EXPENSE,
   UPDATE_CATEGORY_MAPPER,
 } from "../../reducers/actions";
-import {
-  convertToRawExpenses,
-  categorizeItems,
-  populateCategoryMapper,
-  applyCategorySwapToAll,
-} from "./utils";
+import { populateCategoryMapper, applyCategorySwapToAll } from "./utils";
 import { WIZARD_STEP_KEYS } from "../constants";
 import NextStepButton from "../../components/NextStepButton";
 import { CATEGORY_NAMES } from "./constants";
 import { CategoryItem } from "../../components/CategoryItem";
-import { Checkbox } from "../../components/Checkbox";
 import { normalizeString } from "../../utils/common";
+import { SelectedExpenseCard } from "../../components/SelectedExpenseCard";
 import "./Categorization.css";
 
 export const Categorization: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const { file } = useFile();
   const { expenses, dispatch } = useExpenses();
-  const [itemsSwapped, setItemsSwapped] = useState(0);
+  const [itemsUpdated, setItemsUpdated] = useState(0);
   const [selectedItem, setSelectedItem] =
     useState<CategorizedExpenseItem | null>(null);
-
-  const rawExpenses = useMemo(
-    () => convertToRawExpenses(file.data, file.fileHeaderRoles),
-    [file.data, file.fileHeaderRoles]
-  );
-
-  const calcedCategorizedItems = useMemo(
-    () => categorizeItems(rawExpenses, expenses.categoryMapper),
-    [rawExpenses, expenses.categoryMapper]
-  );
-
-  useEffect(() => {
-    if (calcedCategorizedItems.size > 0) {
-      dispatch({
-        type: UPDATE_CATEGORIZED_EXPENSES,
-        payload: calcedCategorizedItems,
-      });
-    }
-  }, [calcedCategorizedItems, dispatch]);
 
   const handleItemClick = (item: CategorizedExpenseItem) => {
     setSelectedItem(item);
@@ -82,21 +53,17 @@ export const Categorization: React.FC = () => {
         const normalizedSelectedDesc = normalizeString(
           item.rawItem.description
         );
-        const itemsSwapped = applyCategorySwapToAll(
+        const itemsUpdatedCount = applyCategorySwapToAll(
           expenses.categorizedItems,
           normalizedSelectedDesc,
           destinationCategory,
           swapCategory
         );
-        setItemsSwapped(itemsSwapped);
+        setItemsUpdated(itemsUpdatedCount);
         setTimeout(() => {
-          setItemsSwapped(0);
+          setItemsUpdated(0);
         }, 2000);
-      } else {
-        if (!item || item.category === destinationCategory) {
-          return;
-        }
-
+      } else if (item && item.category !== destinationCategory) {
         swapCategory(item, destinationCategory);
       }
     },
@@ -112,7 +79,7 @@ export const Categorization: React.FC = () => {
     });
   };
 
-  const handleApplyToAll = () => {
+  const handleApplyToAllClick = () => {
     if (!selectedItem) {
       return;
     }
@@ -128,14 +95,6 @@ export const Categorization: React.FC = () => {
       payload: item,
     });
   };
-
-  const onComplete = () => {
-    setLoading(false);
-  };
-
-  if (loading) {
-    return <LoadingTransition onComplete={onComplete} />;
-  }
 
   return (
     <section className="categorization-wrapper">
@@ -153,34 +112,11 @@ export const Categorization: React.FC = () => {
             />
           </div>
           <div className="card-back">
-            <div className="selected-item-wrapper">
-              <div key={selectedItem?.id} className="expense-item">
-                <div className="expense-details">
-                  <span className="amount">
-                    $
-                    {selectedItem?.rawItem.expense_amount ??
-                      selectedItem?.rawItem.rebate_amount ??
-                      "$0.00"}
-                  </span>
-                  <span className="description">
-                    {selectedItem?.rawItem.description}
-                  </span>
-                </div>
-              </div>
-              {itemsSwapped > 0 && (
-                <div className="items-swapped-container">
-                  <span>
-                    {itemsSwapped} items swapped to {selectedItem?.category}
-                  </span>
-                </div>
-              )}
-              <Checkbox
-                text="Apply to all"
-                checked={selectedItem?.applyToAll ?? false}
-                onClick={handleApplyToAll}
-              />
-              <span>Which category does this expense belong to?</span>
-            </div>
+            <SelectedExpenseCard
+              selectedItem={selectedItem}
+              itemsUpdated={itemsUpdated}
+              handleApplyToAllClick={handleApplyToAllClick}
+            />
           </div>
         </div>
       </div>
@@ -193,6 +129,7 @@ export const Categorization: React.FC = () => {
               handleCategoryClick={handleCategoryClick}
               handleItemClick={handleItemClick}
               showEmptyCategory={!!selectedItem}
+              key={category}
             />
           ))}
         </div>

@@ -10,5 +10,6 @@ export type WizardStep = {
 export type WizardStepKey =
   | "FILE_UPLOAD"
   | "FILE_HEADERS"
+  | "LOADING_CATEGORIES"
   | "CATEGORIZATION"
   | "OUTPUT";

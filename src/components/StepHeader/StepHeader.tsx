@@ -23,6 +23,8 @@ const StepHeader: React.FC = () => {
     <nav className="step-header-wrapper">
       <div className="step-header-container">
         {Object.entries(WIZARD_STEPS).map(([key, step]) => {
+          if (!step.showStepHeader) return null;
+
           const isCurrentStep = step.order === WIZARD_STEPS[currentStep].order;
           const isPreviousStep = step.order < WIZARD_STEPS[currentStep].order;
           const isClickable = step.order <= WIZARD_STEPS[furthestStep].order;
