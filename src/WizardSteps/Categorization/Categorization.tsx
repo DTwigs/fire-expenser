@@ -15,6 +15,7 @@ import { WIZARD_STEP_KEYS } from "../constants";
 import NextStepButton from "../../components/NextStepButton";
 import { CATEGORY_NAMES } from "./constants";
 import { CategoryItem } from "../../components/CategoryItem";
+import { Checkbox } from "../../components/Checkbox";
 import "./Categorization.css";
 
 export const Categorization: React.FC = () => {
@@ -77,6 +78,15 @@ export const Categorization: React.FC = () => {
     });
   };
 
+  const handleApplyToAll = () => {
+    const { category = "", id = "" } = selectedItem ?? {};
+    expenses.categorizedItems.get(category)?.get(id);
+    // dispatch({
+    //   type: UPDATE_CATEGORIZED_EXPENSE,
+    //   payload: calcedCategorizedItems,
+    // });
+  };
+
   const onComplete = () => {
     setLoading(false);
   };
@@ -89,33 +99,40 @@ export const Categorization: React.FC = () => {
     <section className="categorization-wrapper">
       <h2>Categorize Your Expenses</h2>
       <div className="transition-container">
-        <NextStepButton
-          className={selectedItem ? "selected" : ""}
-          currentStep={WIZARD_STEP_KEYS.CATEGORIZATION}
-          isDisabled={
-            (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ?? 0) >
-            0
-          }
-          onClick={handleSubmit}
-        />
-
-        <div
-          className={`selected-item-wrapper ${selectedItem ? "selected" : ""}`}
-        >
-          <div key={selectedItem?.id} className="expense-item">
-            <div className="expense-details">
-              <span className="amount">
-                $
-                {selectedItem?.rawItem.expense_amount ??
-                  selectedItem?.rawItem.rebate_amount ??
-                  "$0.00"}
-              </span>
-              <span className="description">
-                {selectedItem?.rawItem.description}
-              </span>
+        <div className={`card-flip-container ${selectedItem ? "flipped" : ""}`}>
+          <div className="card-front">
+            <NextStepButton
+              currentStep={WIZARD_STEP_KEYS.CATEGORIZATION}
+              isDisabled={
+                (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ??
+                  0) > 0
+              }
+              onClick={handleSubmit}
+            />
+          </div>
+          <div className="card-back">
+            <div className="selected-item-wrapper">
+              <div key={selectedItem?.id} className="expense-item">
+                <div className="expense-details">
+                  <span className="amount">
+                    $
+                    {selectedItem?.rawItem.expense_amount ??
+                      selectedItem?.rawItem.rebate_amount ??
+                      "$0.00"}
+                  </span>
+                  <span className="description">
+                    {selectedItem?.rawItem.description}
+                  </span>
+                </div>
+              </div>
+              <Checkbox
+                text="Apply to all"
+                checked={selectedItem?.applyToAll ?? false}
+                onClick={handleApplyToAll}
+              />
+              <span>Which category does this expense belong to?</span>
             </div>
           </div>
-          <span>Which category does this expense belong to?</span>
         </div>
       </div>
       <div className="categorized-items">
