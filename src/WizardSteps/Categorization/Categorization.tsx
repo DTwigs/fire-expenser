@@ -54,11 +54,11 @@ export const Categorization: React.FC = () => {
       setSelectedItem(unknownCategoryItems[0]);
       return;
     }
-    setSelectedItem(null);
   }, [isCategorizingUnknown, unknownCategoryItems]);
 
   const handleItemClick = (item: CategorizedExpenseItem) => {
     setSelectedItem(item);
+    setItemsUpdated(0);
   };
 
   const swapCategory = useCallback(
@@ -96,8 +96,15 @@ export const Categorization: React.FC = () => {
 
       if (isCategorizingUnknown) {
         const currentIndex = carouselRef.current?.getCurrentIndex();
+        const newIndex = (currentIndex || 0) + itemsUpdatedCount;
+        const carouseItemsCount = carouselRef.current?.getItemsCount() ?? 0;
+        carouselRef.current?.goToIndex(newIndex);
 
-        carouselRef.current?.goToIndex((currentIndex || 0) + itemsUpdatedCount);
+        if (newIndex >= carouseItemsCount) {
+          // when we have removed all items from the carousel,
+          // we set the selected item to null to trigger the next step
+          setSelectedItem(null);
+        }
         return;
       }
       setSelectedItem(null);
@@ -169,16 +176,21 @@ export const Categorization: React.FC = () => {
       </div>
       <div className="categorized-items">
         <div className={`category-wrapper ${selectedItem ? "selected" : ""}`}>
-          {Object.values(CATEGORY_NAMES).map((category) => (
-            <CategoryItem
-              category={category}
-              expenses={expenses}
-              handleCategoryClick={handleCategoryClick}
-              handleItemClick={handleItemClick}
-              showEmptyCategory={!!selectedItem}
-              key={category}
-            />
-          ))}
+          {Object.values(CATEGORY_NAMES).map((category) => {
+            if (selectedItem && category === CATEGORY_NAMES.Unknown) {
+              return null;
+            }
+            return (
+              <CategoryItem
+                category={category}
+                expenses={expenses}
+                handleCategoryClick={handleCategoryClick}
+                handleItemClick={handleItemClick}
+                showEmptyCategory={!!selectedItem}
+                key={category}
+              />
+            );
+          })}
         </div>
       </div>
     </section>

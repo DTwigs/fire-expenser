@@ -14,6 +14,7 @@ type SlotMachineRef = {
   cyclePrevious: () => void;
   goToIndex: (index: number) => void;
   getCurrentIndex: () => number;
+  getItemsCount: () => number;
 } | null;
 
 const SlotMachine = React.forwardRef<SlotMachineRef, SlotMachineProps>(
@@ -55,6 +56,7 @@ const SlotMachine = React.forwardRef<SlotMachineRef, SlotMachineProps>(
         }
       },
       getCurrentIndex: () => currentIndex,
+      getItemsCount: () => items.length,
     }));
 
     // Calculate the offset to center the current item

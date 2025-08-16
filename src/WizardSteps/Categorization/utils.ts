@@ -150,6 +150,10 @@ export const applyCategorySwapToAll = (
   const allItems = getAllItemsAsArray(categorizedItems);
   let itemsSwapped = 0;
   allItems.forEach((item) => {
+    if (!item.applyToAll) {
+      return;
+    }
+
     const normalizedItemDesc =
       item.normalizedDescription || normalizeString(item.rawItem.description);
 

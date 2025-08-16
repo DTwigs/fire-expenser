@@ -113,7 +113,8 @@
   height: 28px;
 }
 
-.selected-item-wrapper .expense-details {
+.selected-item-wrapper .expense-details,
+.selected-item-wrapper .expense-details:hover {
   border: 2px solid var(--color-primary);
 }
 
@@ -166,6 +167,10 @@
   flex: 4;
   overflow: hidden;
   border-radius: 2px;
+}
+
+.expense-details:hover {
+  border: 2px solid var(--color-primary);
 }
 
 .amount {

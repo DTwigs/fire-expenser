@@ -36,8 +36,6 @@ export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log({ frozenItems });
-
   return (
     <div className="selected-item-wrapper">
       {showCarousel && frozenItems.length > 0 ? (
