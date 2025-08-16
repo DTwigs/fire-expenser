@@ -67,6 +67,7 @@ export const categorizeItems = (
       id: guid,
       rawItem: rawExpense,
       category: categoryName,
+      normalizedDescription: normalizedDesc,
       applyToAll: true,
     });
 
@@ -162,3 +163,9 @@ export const applyCategorySwapToAll = (
 
   return itemsSwapped;
 };
+
+export const sortByNormalizedDescription = (
+  a: CategorizedExpenseItem,
+  b: CategorizedExpenseItem
+): number =>
+  (a.normalizedDescription || "").localeCompare(b.normalizedDescription || "");

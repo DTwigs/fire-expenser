@@ -2,19 +2,19 @@ import React, { useState, useRef } from "react";
 import "./SlotMachine.css";
 
 interface SlotMachineProps {
-  items: string[];
+  items: React.ReactNode[];
   height?: number;
   itemHeight?: number;
   speed?: number;
   className?: string;
 }
 
-interface SlotMachineRef {
+type SlotMachineRef = {
   cycleNext: () => void;
   cyclePrevious: () => void;
   goToIndex: (index: number) => void;
   getCurrentIndex: () => number;
-}
+} | null;
 
 const SlotMachine = React.forwardRef<SlotMachineRef, SlotMachineProps>(
   (

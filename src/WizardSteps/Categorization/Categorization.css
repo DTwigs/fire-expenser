@@ -46,6 +46,10 @@
   transition: transform var(--transition-time) ease-out;
 }
 
+.card-flip-container.categorizing-unknown {
+  height: 200px;
+}
+
 .card-flip-container.flipped {
   transform: rotateX(180deg);
 }

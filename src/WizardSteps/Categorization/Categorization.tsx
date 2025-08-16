@@ -1,4 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   useExpenses,
   type CategorizedExpenseItem,
@@ -9,20 +15,47 @@ import {
   UPDATE_CATEGORIZED_EXPENSE,
   UPDATE_CATEGORY_MAPPER,
 } from "../../reducers/actions";
-import { populateCategoryMapper, applyCategorySwapToAll } from "./utils";
+import {
+  populateCategoryMapper,
+  applyCategorySwapToAll,
+  sortByNormalizedDescription,
+} from "./utils";
 import { WIZARD_STEP_KEYS } from "../constants";
 import NextStepButton from "../../components/NextStepButton";
 import { CATEGORY_NAMES } from "./constants";
 import { CategoryItem } from "../../components/CategoryItem";
-import { normalizeString } from "../../utils/common";
 import { SelectedExpenseCard } from "../../components/SelectedExpenseCard";
+import type { SlotMachineRef } from "../../components/SlotMachine";
 import "./Categorization.css";
 
 export const Categorization: React.FC = () => {
+  const carouselRef = useRef<SlotMachineRef>(null);
   const { expenses, dispatch } = useExpenses();
   const [itemsUpdated, setItemsUpdated] = useState(0);
   const [selectedItem, setSelectedItem] =
     useState<CategorizedExpenseItem | null>(null);
+
+  const unknownCategoryItems = useMemo(
+    () =>
+      Array.from(
+        expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.values() ?? []
+      ).sort(sortByNormalizedDescription),
+    [expenses.categorizedItems]
+  );
+
+  const isCategorizingUnknown = useMemo(
+    () =>
+      (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ?? 0) >= 1,
+    [expenses.categorizedItems]
+  );
+
+  useEffect(() => {
+    if (isCategorizingUnknown) {
+      setSelectedItem(unknownCategoryItems[0]);
+      return;
+    }
+    setSelectedItem(null);
+  }, [isCategorizingUnknown, unknownCategoryItems]);
 
   const handleItemClick = (item: CategorizedExpenseItem) => {
     setSelectedItem(item);
@@ -45,29 +78,36 @@ export const Categorization: React.FC = () => {
   const handleCategoryClick = useCallback(
     (destinationCategory: string) => {
       const item = selectedItem;
-      setSelectedItem(null);
 
+      let itemsUpdatedCount = 1;
       // if applyToAll is true, we grab all other items in the Unknown category with the same
       // normalized description and move them to the destination category.
       if (item?.applyToAll) {
-        const normalizedSelectedDesc = normalizeString(
-          item.rawItem.description
-        );
-        const itemsUpdatedCount = applyCategorySwapToAll(
+        itemsUpdatedCount = applyCategorySwapToAll(
           expenses.categorizedItems,
-          normalizedSelectedDesc,
+          item.normalizedDescription ?? "",
           destinationCategory,
           swapCategory
         );
         setItemsUpdated(itemsUpdatedCount);
-        setTimeout(() => {
-          setItemsUpdated(0);
-        }, 2000);
       } else if (item && item.category !== destinationCategory) {
         swapCategory(item, destinationCategory);
       }
+
+      if (isCategorizingUnknown) {
+        const currentIndex = carouselRef.current?.getCurrentIndex();
+
+        carouselRef.current?.goToIndex((currentIndex || 0) + itemsUpdatedCount);
+        return;
+      }
+      setSelectedItem(null);
     },
-    [expenses.categorizedItems, selectedItem, swapCategory]
+    [
+      expenses.categorizedItems,
+      selectedItem,
+      swapCategory,
+      isCategorizingUnknown,
+    ]
   );
 
   const handleSubmit = () => {
@@ -100,7 +140,11 @@ export const Categorization: React.FC = () => {
     <section className="categorization-wrapper">
       <h2>Categorize Your Expenses</h2>
       <div className="transition-container">
-        <div className={`card-flip-container ${selectedItem ? "flipped" : ""}`}>
+        <div
+          className={`card-flip-container ${selectedItem ? "flipped" : ""} ${
+            isCategorizingUnknown ? "categorizing-unknown" : ""
+          }`}
+        >
           <div className="card-front">
             <NextStepButton
               currentStep={WIZARD_STEP_KEYS.CATEGORIZATION}
@@ -113,9 +157,12 @@ export const Categorization: React.FC = () => {
           </div>
           <div className="card-back">
             <SelectedExpenseCard
+              carouselItems={unknownCategoryItems}
+              showCarousel={isCategorizingUnknown}
               selectedItem={selectedItem}
               itemsUpdated={itemsUpdated}
               handleApplyToAllClick={handleApplyToAllClick}
+              carouselRef={carouselRef}
             />
           </div>
         </div>
