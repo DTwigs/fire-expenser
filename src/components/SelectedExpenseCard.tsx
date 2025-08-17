@@ -7,7 +7,6 @@ import { sortByNormalizedDescription } from "../WizardSteps/Categorization/utils
 
 type SelectedExpenseCardProps = {
   selectedItem: CategorizedExpenseItem | null;
-  itemsUpdated: number;
   handleApplyToAllClick: () => void;
   showCarousel: boolean;
   carouselItems: CategorizedExpenseItem[];
@@ -16,13 +15,12 @@ type SelectedExpenseCardProps = {
 
 export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
   selectedItem,
-  itemsUpdated,
   handleApplyToAllClick,
   showCarousel,
   carouselItems,
   carouselRef,
 }) => {
-  const [frozenItems, setFrozenItems] = useState<React.ReactNode[]>([]);
+  const [frozenNodes, setFrozenNodes] = useState<React.ReactNode[]>([]);
 
   useEffect(() => {
     if (!showCarousel) return;
@@ -32,15 +30,15 @@ export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
     const nodes = carouselItems
       .sort(sortByNormalizedDescription)
       .map((item) => <ExpenseItem key={item?.id} item={item} />);
-    setFrozenItems(nodes);
+    setFrozenNodes(nodes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="selected-item-wrapper">
-      {showCarousel && frozenItems.length > 0 ? (
+      {showCarousel && frozenNodes.length > 0 ? (
         <SlotMachine
-          items={frozenItems}
+          items={frozenNodes}
           height={120}
           itemHeight={38}
           ref={carouselRef}
@@ -50,15 +48,6 @@ export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
           <ExpenseItem key={selectedItem?.id} item={selectedItem} />
         )
       )}
-      {
-        <div className="items-updated-container">
-          {itemsUpdated > 0 && (
-            <span>
-              {itemsUpdated} items updated to {selectedItem?.category}
-            </span>
-          )}
-        </div>
-      }
       <Checkbox
         text="Apply to all"
         checked={selectedItem?.applyToAll ?? false}

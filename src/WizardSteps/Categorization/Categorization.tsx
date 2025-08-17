@@ -26,12 +26,16 @@ import { CATEGORY_NAMES } from "./constants";
 import { CategoryItem } from "../../components/CategoryItem";
 import { SelectedExpenseCard } from "../../components/SelectedExpenseCard";
 import type { SlotMachineRef } from "../../components/SlotMachine";
+import {
+  AnimatedItemsUpdated,
+  type AnimatedItemsUpdatedRef,
+} from "../../components/AnimatedItemsUpdated";
 import "./Categorization.css";
 
 export const Categorization: React.FC = () => {
   const carouselRef = useRef<SlotMachineRef>(null);
+  const itemsUpdatedRef = useRef<AnimatedItemsUpdatedRef>(null);
   const { expenses, dispatch } = useExpenses();
-  const [itemsUpdated, setItemsUpdated] = useState(0);
   const [selectedItem, setSelectedItem] =
     useState<CategorizedExpenseItem | null>(null);
 
@@ -58,7 +62,6 @@ export const Categorization: React.FC = () => {
 
   const handleItemClick = (item: CategorizedExpenseItem) => {
     setSelectedItem(item);
-    setItemsUpdated(0);
   };
 
   const swapCategory = useCallback(
@@ -89,9 +92,10 @@ export const Categorization: React.FC = () => {
           destinationCategory,
           swapCategory
         );
-        setItemsUpdated(itemsUpdatedCount);
+        itemsUpdatedRef.current?.add(itemsUpdatedCount);
       } else if (item && item.category !== destinationCategory) {
         swapCategory(item, destinationCategory);
+        itemsUpdatedRef.current?.add(1);
       }
 
       if (isCategorizingUnknown) {
@@ -146,7 +150,9 @@ export const Categorization: React.FC = () => {
   return (
     <section className="categorization-wrapper">
       <h2>Categorize Your Expenses</h2>
+
       <div className="transition-container">
+        <div className="flex-item-single"></div>
         <div
           className={`card-flip-container ${selectedItem ? "flipped" : ""} ${
             isCategorizingUnknown ? "categorizing-unknown" : ""
@@ -167,11 +173,13 @@ export const Categorization: React.FC = () => {
               carouselItems={unknownCategoryItems}
               showCarousel={isCategorizingUnknown}
               selectedItem={selectedItem}
-              itemsUpdated={itemsUpdated}
               handleApplyToAllClick={handleApplyToAllClick}
               carouselRef={carouselRef}
             />
           </div>
+        </div>
+        <div className="flex-item-single">
+          <AnimatedItemsUpdated ref={itemsUpdatedRef} />
         </div>
       </div>
       <div className="categorized-items">

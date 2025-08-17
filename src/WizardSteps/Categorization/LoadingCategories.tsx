@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import LoadingTransition from "../../components/LoadingTransition";
 import { useFile, useExpenses } from "../../store";
 import { UPDATE_CATEGORIZED_EXPENSES } from "../../reducers/actions";
 import { convertToRawExpenses, categorizeItems } from "./utils";
-import { WIZARD_STEPS } from "../constants";
-import "./Categorization.css";
-import { useNavigate } from "react-router-dom";
+import { WIZARD_STEP_KEYS, WIZARD_STEPS } from "../constants";
+import { SET_CURRENT_STEP } from "../../reducers/actions";
 
 export const LoadingCategories: React.FC = () => {
   const { file } = useFile();
@@ -31,6 +31,10 @@ export const LoadingCategories: React.FC = () => {
   }, [calcedCategorizedItems, dispatch]);
 
   const onComplete = () => {
+    dispatch({
+      type: SET_CURRENT_STEP,
+      payload: WIZARD_STEP_KEYS.CATEGORIZATION,
+    });
     navigate(WIZARD_STEPS.CATEGORIZATION.url);
   };
 

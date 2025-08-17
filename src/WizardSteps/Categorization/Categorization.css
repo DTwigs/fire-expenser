@@ -24,14 +24,20 @@
   }
 }
 
+.categorization-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Card flip transition styles */
 .transition-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   min-height: 82px;
   margin-bottom: 20px;
   perspective: 1000px;
   position: relative;
+  flex: 5;
 }
 
 .transition-container .submit-container {
@@ -44,6 +50,7 @@
   height: 82px;
   transform-style: preserve-3d;
   transition: transform var(--transition-time) ease-out;
+  flex: 3;
 }
 
 .card-flip-container.categorizing-unknown {
@@ -106,10 +113,9 @@
   font-size: 0.8rem;
 }
 
-.selected-item-wrapper .expense-item,
 .selected-item-wrapper .expense-item {
   cursor: default;
-  width: 50%;
+  width: 80%;
   height: 28px;
 }
 
@@ -221,4 +227,45 @@
 .category-icon {
   margin-right: 10px;
   margin-top: 2px;
+}
+
+@keyframes floatText {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-40px);
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0%;
+  }
+  20% {
+    opacity: 100%;
+  }
+  80% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 0%;
+  }
+}
+
+.items-updated-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Lcd Phone", sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: var(--color-tertiary);
+  animation: floatText 2s ease-out forwards, fadeInOut 2s ease-out forwards;
+}
+
+.flex-item-single {
+  flex: 1;
+  display: flex;
 }
