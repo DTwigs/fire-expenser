@@ -6,6 +6,7 @@ import {
   UPDATE_CATEGORIZED_EXPENSES,
   UPDATE_CATEGORIZED_EXPENSE,
   REMOVE_FILE,
+  UPDATE_TOTALS,
 } from "./actions";
 import type { ExpensesAction } from "./types";
 
@@ -73,6 +74,11 @@ export const expensesReducer = (
         categorizedItems,
       };
     }
+    case UPDATE_TOTALS:
+      return {
+        ...state,
+        totals: action.payload,
+      };
     case REMOVE_FILE:
       return {
         ...state,

@@ -6,8 +6,12 @@ import type { FileHeaderRole } from "../../store/types";
 import { WIZARD_STEP_KEYS } from "../constants";
 import { HeaderRole } from "./HeaderRole";
 import "./MapFileHeaders.css";
+import { withWizard, type WithWizardProps } from "../withWizard";
 
-export const MapFileHeaders: React.FC = () => {
+const MapFileHeadersStep: React.FC<WithWizardProps> = ({
+  handleNextStep,
+  step,
+}) => {
   const { file, dispatch } = useFile();
   const [dragOverRole, setDragOverRole] = useState<keyof FileHeaderRole | null>(
     null
@@ -104,11 +108,7 @@ export const MapFileHeaders: React.FC = () => {
 
       <section className="csv-headers-section">
         <h4>CSV Headers</h4>
-        <p>
-          We've detected the following headers in your csv file. Please drag
-          them to their corresponding function. The fields marked with
-          <span className="text-secondary"> *</span> are required.
-        </p>
+        <p dangerouslySetInnerHTML={{ __html: step.description }} />
         <div className="csv-headers-container">
           {file.headers.map((header, index) => {
             const isMapped = isRoleMapped(file, header);
@@ -127,9 +127,14 @@ export const MapFileHeaders: React.FC = () => {
       </section>
 
       <NextStepButton
-        currentStep={WIZARD_STEP_KEYS.FILE_HEADERS}
+        onClick={handleNextStep}
         isDisabled={isNextStepDisabled(file)}
       />
     </section>
   );
 };
+
+export const MapFileHeaders = withWizard(
+  MapFileHeadersStep,
+  WIZARD_STEP_KEYS.FILE_HEADERS
+);

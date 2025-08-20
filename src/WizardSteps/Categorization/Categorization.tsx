@@ -31,8 +31,12 @@ import {
   type AnimatedItemsUpdatedRef,
 } from "../../components/AnimatedItemsUpdated";
 import "./Categorization.css";
+import { withWizard, type WithWizardProps } from "../withWizard";
 
-export const Categorization: React.FC = () => {
+const CategorizationStep: React.FC<WithWizardProps> = ({
+  handleNextStep,
+  step,
+}) => {
   const carouselRef = useRef<SlotMachineRef>(null);
   const itemsUpdatedRef = useRef<AnimatedItemsUpdatedRef>(null);
   const { expenses, dispatch } = useExpenses();
@@ -128,6 +132,7 @@ export const Categorization: React.FC = () => {
       type: UPDATE_CATEGORY_MAPPER,
       payload: newMapper,
     });
+    handleNextStep();
   };
 
   const handleApplyToAllClick = () => {
@@ -149,7 +154,7 @@ export const Categorization: React.FC = () => {
 
   return (
     <section className="categorization-wrapper">
-      <h2>Categorize Your Expenses</h2>
+      <h2>{step.description}</h2>
 
       <div className="transition-container">
         <div className="flex-item-single"></div>
@@ -160,7 +165,6 @@ export const Categorization: React.FC = () => {
         >
           <div className="card-front">
             <NextStepButton
-              currentStep={WIZARD_STEP_KEYS.CATEGORIZATION}
               isDisabled={
                 (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ??
                   0) > 0
@@ -204,3 +208,8 @@ export const Categorization: React.FC = () => {
     </section>
   );
 };
+
+export const Categorization = withWizard(
+  CategorizationStep,
+  WIZARD_STEP_KEYS.CATEGORIZATION
+);

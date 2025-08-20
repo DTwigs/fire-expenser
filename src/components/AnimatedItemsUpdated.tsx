@@ -5,7 +5,6 @@ import {
   useRef,
   useState,
 } from "react";
-import "./Categorization.css";
 
 export type AnimatedItemsUpdatedRef = {
   add: (itemsUpdated: number) => void;

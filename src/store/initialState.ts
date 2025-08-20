@@ -6,6 +6,11 @@ export const initialState: AppState = {
     categorizedItems: new Map(),
     error: null,
     categoryMapper: new Map(),
+    totals: {
+      totalsByCategory: {},
+      rebateTotal: 0,
+      expenseTotal: 0,
+    },
   },
   file: {
     headers: [],

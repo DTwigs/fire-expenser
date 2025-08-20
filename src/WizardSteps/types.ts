@@ -12,4 +12,5 @@ export type WizardStepKey =
   | "FILE_HEADERS"
   | "LOADING_CATEGORIES"
   | "CATEGORIZATION"
+  | "LOADING_RESULTS"
   | "OUTPUT";

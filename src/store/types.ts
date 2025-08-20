@@ -18,6 +18,7 @@ export type CategorizedExpenses = Map<CategoryKey, CategorizedExpenseItems>;
 export interface ExpensesState {
   categorizedItems: CategorizedExpenses;
   categoryMapper: CategoryMapper;
+  totals: ExpenseTotals;
   error: string | null;
 }
 
@@ -44,9 +45,16 @@ export type RawExpenseItem = {
 export type CategorizedExpenseItem = {
   id: GUID;
   rawItem: RawExpenseItem;
+  amount: number;
   category?: CategoryKey;
   normalizedDescription?: NormalizedExpenseDesc;
   applyToAll: boolean;
+};
+
+export type ExpenseTotals = {
+  totalsByCategory: Record<string, number>;
+  rebateTotal: number;
+  expenseTotal: number;
 };
 
 export type FileHeaderRole = {

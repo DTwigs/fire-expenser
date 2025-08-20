@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 import "./LoadingTransition.css";
+import type { WizardStep } from "../WizardSteps/types";
 
-const LoadingTransition: React.FC<{ onComplete: () => void }> = ({
-  onComplete,
-}) => {
+const LoadingTransition: React.FC<{
+  step: WizardStep;
+  onComplete: () => void;
+}> = ({ step, onComplete }) => {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
 
@@ -40,8 +42,8 @@ const LoadingTransition: React.FC<{ onComplete: () => void }> = ({
         <div className="loading-icon">
           <Icon path={mdiLoading} size={3} className="spinning" />
         </div>
-        <h2>Processing your file...</h2>
-        <p>Please wait while we analyze your CSV data</p>
+        <h2>{step.title}</h2>
+        <p>{step.description}</p>
 
         <div className="progress-container">
           <div className="progress-bar">

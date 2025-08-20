@@ -4,6 +4,7 @@ import type {
   CategoryMapper,
   CategorizedExpenses,
   CategorizedExpenseItem,
+  ExpenseTotals,
 } from "../store/types";
 import type { WizardStepKey } from "../WizardSteps/types";
 import {
@@ -19,6 +20,7 @@ import {
   UPDATE_FILE_HEADER_ROLES,
   UPDATE_SINGLE_HEADER_ROLE,
   UPDATE_CATEGORIZED_EXPENSE,
+  UPDATE_TOTALS,
 } from "./actions";
 
 // Action types
@@ -46,6 +48,10 @@ export type ExpensesAction =
         newCategory: string;
         expense: CategorizedExpenseItem;
       };
+    }
+  | {
+      type: typeof UPDATE_TOTALS;
+      payload: ExpenseTotals;
     }
   | { type: typeof REMOVE_FILE };
 

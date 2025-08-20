@@ -6,6 +6,7 @@ export const WIZARD_STEP_KEYS: Record<WizardStepKey, WizardStepKey> = {
   FILE_HEADERS: "FILE_HEADERS",
   LOADING_CATEGORIES: "LOADING_CATEGORIES",
   CATEGORIZATION: "CATEGORIZATION",
+  LOADING_RESULTS: "LOADING_RESULTS",
   OUTPUT: "OUTPUT",
 };
 
@@ -14,6 +15,7 @@ export const WIZARD_STEP_ORDER: WizardStepKey[] = [
   WIZARD_STEP_KEYS.FILE_HEADERS,
   WIZARD_STEP_KEYS.LOADING_CATEGORIES,
   WIZARD_STEP_KEYS.CATEGORIZATION,
+  WIZARD_STEP_KEYS.LOADING_RESULTS,
   WIZARD_STEP_KEYS.OUTPUT,
 ];
 
@@ -21,7 +23,8 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
   FILE_UPLOAD: {
     url: "/file-upload",
     title: "File Upload",
-    description: "Upload your CSV file to get started",
+    description:
+      "Upload your bank statement or expense CSV file to get started.",
     showStepHeader: true,
     order: 1,
     icon: mdiFileUpload,
@@ -29,7 +32,8 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
   FILE_HEADERS: {
     url: "/file-headers",
     title: "File Headers",
-    description: "Map your file headers to the correct fields",
+    description:
+      "We've detected the following headers in your csv file. Please drag them to their corresponding function. The fields marked with * are required.",
     showStepHeader: true,
     order: 2,
     icon: mdiArchive,
@@ -45,17 +49,25 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
   CATEGORIZATION: {
     url: "/categorization",
     title: "Categorize",
-    description: "Categorize your expenses",
+    description: "Categorize Your Expenses",
     showStepHeader: true,
     order: 4,
     icon: mdiTag,
+  },
+  LOADING_RESULTS: {
+    url: "/loading-results",
+    title: "Loading Results",
+    description: "Loading results",
+    showStepHeader: false,
+    order: 5,
+    icon: mdiChartLine,
   },
   OUTPUT: {
     url: "/output",
     title: "Results",
     description: "View your categorized expenses",
     showStepHeader: true,
-    order: 5,
+    order: 6,
     icon: mdiChartLine,
   },
 };

@@ -66,6 +66,10 @@ export const categorizeItems = (
     categoryItems.set(guid, {
       id: guid,
       rawItem: rawExpense,
+      amount:
+        Number(rawExpense.expense_amount) ||
+        (Number(rawExpense.rebate_amount) || 0) * -1 ||
+        0,
       category: categoryName,
       normalizedDescription: normalizedDesc,
       applyToAll: true,

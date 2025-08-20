@@ -5,8 +5,12 @@ import DragAndDropFileInput from "../../components/DragAndDropFileInput/DragAndD
 import NextStepButton from "../../components/NextStepButton";
 import { WIZARD_STEP_KEYS } from "../constants";
 import "./FileUpload.css";
+import { withWizard, type WithWizardProps } from "../withWizard";
 
-export const FileUpload: React.FC = () => {
+const FileUploadStep: React.FC<WithWizardProps> = ({
+  handleNextStep,
+  step,
+}) => {
   const { dispatch: dispatchWizard } = useWizard();
   const { dispatch } = useFile();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -65,8 +69,8 @@ export const FileUpload: React.FC = () => {
 
   return (
     <section className="file-upload-container">
-      <h2>Upload CSV File</h2>
-      <p>Upload your bank statement or expense CSV file to get started.</p>
+      <h2>{step.title}</h2>
+      <p>{step.description}</p>
       <DragAndDropFileInput
         selectedFile={selectedFile}
         setSelectedFile={setSelectedFile}
@@ -76,9 +80,14 @@ export const FileUpload: React.FC = () => {
         fileInputRef={fileInputRef}
       />
       <NextStepButton
-        currentStep={WIZARD_STEP_KEYS.FILE_UPLOAD}
+        onClick={handleNextStep}
         isDisabled={!selectedFile && !isLoading}
       />
     </section>
   );
 };
+
+export const FileUpload = withWizard(
+  FileUploadStep,
+  WIZARD_STEP_KEYS.FILE_UPLOAD
+);
