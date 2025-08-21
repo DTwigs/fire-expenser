@@ -1,11 +1,12 @@
 import { WIZARD_STEP_KEYS } from "../WizardSteps/constants";
 import type { AppState } from "./types";
+import db from "../db";
 
 export const initialState: AppState = {
   expenses: {
     categorizedItems: new Map(),
     error: null,
-    categoryMapper: new Map(),
+    categoryMapper: db.getCategoryMapper(),
     totals: {
       totalsByCategory: {},
       rebateTotal: 0,

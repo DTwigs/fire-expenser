@@ -150,7 +150,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* overflow: hidden; */
   height: 28px;
   transition: height 0.2s ease-out;
   cursor: pointer;
@@ -272,4 +272,22 @@
 .flex-item-single {
   flex: 1;
   display: flex;
+}
+
+.trash-icon-wrapper {
+  display: block;
+  position: absolute;
+  right: -32px;
+  top: 2px;
+  color: var(--color-background-tint);
+  cursor: pointer;
+}
+
+.trash-icon-wrapper:hover {
+  color: var(--color-secondary);
+}
+
+.slot-machine-item--above .trash-icon-wrapper,
+.slot-machine-item--below .trash-icon-wrapper {
+  display: none;
 }

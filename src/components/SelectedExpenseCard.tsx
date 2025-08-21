@@ -11,6 +11,7 @@ type SelectedExpenseCardProps = {
   showCarousel: boolean;
   carouselItems: CategorizedExpenseItem[];
   carouselRef: React.RefObject<SlotMachineRef> | null;
+  deleteItem: (item: CategorizedExpenseItem) => void;
 };
 
 export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
@@ -19,17 +20,19 @@ export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
   showCarousel,
   carouselItems,
   carouselRef,
+  deleteItem,
 }) => {
   const [frozenNodes, setFrozenNodes] = useState<React.ReactNode[]>([]);
 
   useEffect(() => {
     if (!showCarousel) return;
-
     // freeze the carousel nodes so that removing items from unknown category doesnt
     // cause items in the carousel too disappear.
     const nodes = carouselItems
       .sort(sortByNormalizedDescription)
-      .map((item) => <ExpenseItem key={item?.id} item={item} />);
+      .map((item) => (
+        <ExpenseItem key={item?.id} item={item} deleteItem={deleteItem} />
+      ));
     setFrozenNodes(nodes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -45,7 +48,11 @@ export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
         />
       ) : (
         selectedItem && (
-          <ExpenseItem key={selectedItem?.id} item={selectedItem} />
+          <ExpenseItem
+            key={selectedItem?.id}
+            item={selectedItem}
+            deleteItem={deleteItem}
+          />
         )
       )}
       <Checkbox

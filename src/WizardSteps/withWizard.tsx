@@ -13,7 +13,6 @@ export interface WithWizardProps {
 
 // Define the props that the step components accept
 export interface StepComponentProps {
-  className?: string;
   children?: React.ReactNode;
 }
 

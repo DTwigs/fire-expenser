@@ -7,8 +7,10 @@ import {
   UPDATE_CATEGORIZED_EXPENSE,
   REMOVE_FILE,
   UPDATE_TOTALS,
+  REMOVE_CATEGORIZED_EXPENSE,
 } from "./actions";
 import type { ExpensesAction } from "./types";
+import db from "../db";
 
 // Expenses reducer
 export const expensesReducer = (
@@ -22,6 +24,7 @@ export const expensesReducer = (
         error: action.payload,
       };
     case UPDATE_CATEGORY_MAPPER:
+      db.setCategoryMapper(action.payload);
       return {
         ...state,
         categoryMapper: action.payload,
@@ -79,6 +82,15 @@ export const expensesReducer = (
         ...state,
         totals: action.payload,
       };
+    case REMOVE_CATEGORIZED_EXPENSE: {
+      const { id, category = "" } = action.payload;
+      const categorizedItems = new Map(state.categorizedItems);
+      categorizedItems.get(category)?.delete(id);
+      return {
+        ...state,
+        categorizedItems,
+      };
+    }
     case REMOVE_FILE:
       return {
         ...state,

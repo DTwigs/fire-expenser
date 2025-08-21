@@ -21,6 +21,7 @@ import {
   UPDATE_SINGLE_HEADER_ROLE,
   UPDATE_CATEGORIZED_EXPENSE,
   UPDATE_TOTALS,
+  REMOVE_CATEGORIZED_EXPENSE,
 } from "./actions";
 
 // Action types
@@ -52,6 +53,10 @@ export type ExpensesAction =
   | {
       type: typeof UPDATE_TOTALS;
       payload: ExpenseTotals;
+    }
+  | {
+      type: typeof REMOVE_CATEGORIZED_EXPENSE;
+      payload: CategorizedExpenseItem;
     }
   | { type: typeof REMOVE_FILE };
 

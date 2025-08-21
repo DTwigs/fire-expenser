@@ -11,6 +11,7 @@ import {
   type CategoryKey,
 } from "../../store";
 import {
+  REMOVE_CATEGORIZED_EXPENSE,
   SWAP_CATEGORIZED_EXPENSE,
   UPDATE_CATEGORIZED_EXPENSE,
   UPDATE_CATEGORY_MAPPER,
@@ -82,6 +83,22 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
     [dispatch]
   );
 
+  const goToNextInCarousel = useCallback(
+    (itemsUpdatedCount: number) => {
+      const currentIndex = carouselRef.current?.getCurrentIndex();
+      const newIndex = (currentIndex || 0) + itemsUpdatedCount;
+      const carouseItemsCount = carouselRef.current?.getItemsCount() ?? 0;
+      carouselRef.current?.goToIndex(newIndex);
+
+      if (newIndex >= carouseItemsCount) {
+        // when we have removed all items from the carousel,
+        // we set the selected item to null to trigger the next step
+        setSelectedItem(null);
+      }
+    },
+    [carouselRef, setSelectedItem]
+  );
+
   const handleCategoryClick = useCallback(
     (destinationCategory: string) => {
       const item = selectedItem;
@@ -103,16 +120,7 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
       }
 
       if (isCategorizingUnknown) {
-        const currentIndex = carouselRef.current?.getCurrentIndex();
-        const newIndex = (currentIndex || 0) + itemsUpdatedCount;
-        const carouseItemsCount = carouselRef.current?.getItemsCount() ?? 0;
-        carouselRef.current?.goToIndex(newIndex);
-
-        if (newIndex >= carouseItemsCount) {
-          // when we have removed all items from the carousel,
-          // we set the selected item to null to trigger the next step
-          setSelectedItem(null);
-        }
+        goToNextInCarousel(itemsUpdatedCount);
         return;
       }
       setSelectedItem(null);
@@ -122,8 +130,22 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
       selectedItem,
       swapCategory,
       isCategorizingUnknown,
+      goToNextInCarousel,
     ]
   );
+
+  const handleDeleteItem = (item: CategorizedExpenseItem) => {
+    dispatch({
+      type: REMOVE_CATEGORIZED_EXPENSE,
+      payload: item,
+    });
+    if (isCategorizingUnknown) {
+      goToNextInCarousel(1);
+      return;
+    } else {
+      setSelectedItem(null);
+    }
+  };
 
   const handleSubmit = () => {
     const newMapper = populateCategoryMapper(expenses);
@@ -179,6 +201,7 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
               selectedItem={selectedItem}
               handleApplyToAllClick={handleApplyToAllClick}
               carouselRef={carouselRef}
+              deleteItem={handleDeleteItem}
             />
           </div>
         </div>
