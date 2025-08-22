@@ -41,7 +41,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
   LOADING_CATEGORIES: {
     url: "/loading-categories",
     title: "Loading Categories",
-    description: "Loading categories",
+    description: "Predicting your expenses categories.",
     showStepHeader: false,
     order: 3,
     icon: mdiTag,
@@ -57,7 +57,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
   LOADING_RESULTS: {
     url: "/loading-results",
     title: "Loading Results",
-    description: "Loading results",
+    description: "Calculating totals.",
     showStepHeader: false,
     order: 5,
     icon: mdiChartLine,
@@ -65,7 +65,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
   OUTPUT: {
     url: "/output",
     title: "Results",
-    description: "View your categorized expenses",
+    description: "Results",
     showStepHeader: true,
     order: 6,
     icon: mdiChartLine,
