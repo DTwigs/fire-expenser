@@ -68,17 +68,19 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
   }, [dispatch, fileInputRef]);
 
   return (
-    <section className="file-upload-container">
+    <section className="step-container">
       <h2>{step.title}</h2>
       <p>{step.description}</p>
-      <DragAndDropFileInput
-        selectedFile={selectedFile}
-        setSelectedFile={setSelectedFile}
-        handleFileProcessing={handleFileProcessing}
-        handleRemoveFile={handleRemoveFile}
-        isLoading={isLoading}
-        fileInputRef={fileInputRef}
-      />
+      <div className="file-upload-container">
+        <DragAndDropFileInput
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
+          handleFileProcessing={handleFileProcessing}
+          handleRemoveFile={handleRemoveFile}
+          isLoading={isLoading}
+          fileInputRef={fileInputRef}
+        />
+      </div>
       <NextStepButton
         onClick={handleNextStep}
         isDisabled={!selectedFile && !isLoading}

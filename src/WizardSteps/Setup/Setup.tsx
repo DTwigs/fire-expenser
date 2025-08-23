@@ -39,29 +39,28 @@ const SetupComponent: React.FC<WithWizardProps> = ({ handleNextStep }) => {
   const isNextDisabled = categories.length === 0;
 
   return (
-    <div className="setup-container">
+    <section className="step-container">
       <div className="setup-content">
         <div className="setup-header">
-          <h1>Setup Your Categories</h1>
+          <h2>Setup Your Categories</h2>
           <p>
             Before we start processing your expenses, let's set up your expense
             categories.
           </p>
-        </div>
-
-        <div className="setup-main">
-          <CategoryCreator
-            categories={categories}
-            onCategoriesChange={handleCategoriesChange}
-          />
         </div>
         <NextStepButton
           isDisabled={isNextDisabled}
           onClick={handleSetupNextStep}
           className="setup-next-button"
         />
+        <div className="setup-main">
+          <CategoryCreator
+            categories={categories}
+            onCategoriesChange={handleCategoriesChange}
+          />
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

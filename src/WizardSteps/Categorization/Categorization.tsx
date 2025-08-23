@@ -176,7 +176,7 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
   };
 
   return (
-    <section className="categorization-wrapper">
+    <section className="step-container">
       <h2>{step.description}</h2>
 
       <div className="transition-container">

@@ -78,8 +78,9 @@ const MapFileHeadersStep: React.FC<WithWizardProps> = ({
   );
 
   return (
-    <section className="file-headers-container">
-      <h3>Match your csv headers to their roles</h3>
+    <section className="step-container file-headers-container">
+      <h2>{step.title}</h2>
+      <h3>{step.description}</h3>
 
       {/* File Header Roles */}
       <section className="header-roles-section">
@@ -108,7 +109,11 @@ const MapFileHeadersStep: React.FC<WithWizardProps> = ({
 
       <section className="csv-headers-section">
         <h4>CSV Headers</h4>
-        <p dangerouslySetInnerHTML={{ __html: step.description }} />
+        <p>
+          We've detected the following headers in your csv file. Please drag
+          them to their corresponding function. The fields marked with{" "}
+          <span className="required-field">*</span> are required.
+        </p>
         <div className="csv-headers-container">
           {file.headers.map((header, index) => {
             const isMapped = isRoleMapped(file, header);

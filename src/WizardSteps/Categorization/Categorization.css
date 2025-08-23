@@ -24,11 +24,6 @@
   }
 }
 
-.categorization-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
 /* Card flip transition styles */
 .transition-container {
   display: flex;

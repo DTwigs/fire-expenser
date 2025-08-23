@@ -48,8 +48,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
   FILE_HEADERS: {
     url: "/file-headers",
     title: "File Headers",
-    description:
-      "We've detected the following headers in your csv file. Please drag them to their corresponding function. The fields marked with * are required.",
+    description: "Match your csv headers to their roles",
     showStepHeader: true,
     order: 3,
     icon: mdiArchive,

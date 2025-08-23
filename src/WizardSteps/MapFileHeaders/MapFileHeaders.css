@@ -1,15 +1,3 @@
-.file-headers-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.file-headers-container h3 {
-  text-align: center;
-  color: var(--color-light-text);
-  margin-bottom: 40px;
-}
-
 .file-headers-container p {
   text-align: center;
   color: var(--color-lighter-text);
@@ -113,6 +101,10 @@
 
 .remove-mapping:hover {
   color: var(--color-text);
+}
+
+.required-field {
+  color: var(--color-secondary);
 }
 
 .drop-zone {

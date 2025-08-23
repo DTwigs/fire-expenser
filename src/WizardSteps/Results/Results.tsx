@@ -7,7 +7,7 @@ import "./Results.css";
 import { Icon } from "@mdi/react";
 import { mdiContentCopy, mdiStar } from "@mdi/js";
 
-const ResultsStep: React.FC<WithWizardProps> = () => {
+const ResultsStep: React.FC<WithWizardProps> = ({ step }) => {
   const { expenses } = useExpenses();
   const { settings } = useSettings();
   const { expenseTotal, rebateTotal, totalsByCategory } = expenses.totals;
@@ -34,7 +34,8 @@ const ResultsStep: React.FC<WithWizardProps> = () => {
   };
 
   return (
-    <div>
+    <section className="step-container">
+      <h2>{step.title}</h2>
       <div className="results-container">
         <div className="results-item results-item-expense">
           <h3>Total Expenses</h3>
@@ -56,7 +57,7 @@ const ResultsStep: React.FC<WithWizardProps> = () => {
           {copied ? "Copied!" : "Copy to Spreadsheet"}
         </button>
         <small className="copy-hint">
-          Copies category totals to be pasted into a spreadsheet
+          Copy category totals to be pasted into your spreadsheet
         </small>
       </div>
 
@@ -75,7 +76,7 @@ const ResultsStep: React.FC<WithWizardProps> = () => {
           </>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
