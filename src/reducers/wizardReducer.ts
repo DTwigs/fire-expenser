@@ -1,6 +1,11 @@
 import type { WizardState } from "../store/types";
-import { WIZARD_STEPS } from "../WizardSteps/constants";
+import { WIZARD_STEP_KEYS, WIZARD_STEPS } from "../WizardSteps/constants";
 import type { WizardAction } from "./types";
+
+export const initialWizardState: WizardState = {
+  currentStep: WIZARD_STEP_KEYS.SETUP,
+  furthestStep: WIZARD_STEP_KEYS.SETUP,
+};
 
 export const wizardReducer = (
   state: WizardState,

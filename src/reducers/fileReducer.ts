@@ -1,6 +1,18 @@
-import { initialState } from "../store/initialState";
 import type { FileState } from "../store/types";
 import type { FileAction } from "./types";
+
+export const initialFileState: FileState = {
+  headers: [],
+  data: [],
+  fileHeaderRoles: {
+    date: null,
+    expense_amount: "",
+    rebate_amount: null,
+    card: null,
+    category: "",
+    description: "",
+  },
+};
 
 // File reducer
 export const fileReducer = (
@@ -23,7 +35,7 @@ export const fileReducer = (
         ...state,
         headers: [],
         data: [],
-        fileHeaderRoles: initialState.file.fileHeaderRoles,
+        fileHeaderRoles: initialFileState.fileHeaderRoles,
       };
     case "UPDATE_FILE_HEADER_ROLES":
       return {

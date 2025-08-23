@@ -10,7 +10,7 @@ import {
   type NormalizedExpenseDesc,
   type CategoryKey,
 } from "../../store";
-import { CATEGORY_KEY_WORDS, CATEGORY_NAMES } from "./constants";
+import { CATEGORY_UNKNOWN } from "./constants";
 import { generateGuid, normalizeString } from "../../utils/common";
 
 export const convertToRawExpenses = (
@@ -45,20 +45,13 @@ export const categorizeItems = (
   categoryMapper: CategoryMapper
 ): CategorizedExpenses => {
   const categorizedItems: CategorizedExpenses = new Map();
-  let categoryName: string = CATEGORY_NAMES.Unknown;
+  let categoryName: string;
 
   rawExpenses.forEach((rawExpense) => {
-    const rawCategory = rawExpense.category;
     const normalizedDesc = normalizeString(rawExpense.description);
 
-    if (rawCategory) {
-      const { category } = findCategory(
-        rawCategory,
-        categoryMapper,
-        normalizedDesc
-      );
-      categoryName = category;
-    }
+    const category = findCategory(categoryMapper, normalizedDesc);
+    categoryName = category;
 
     const categoryItems: CategorizedExpenseItems =
       categorizedItems.get(categoryName) ?? new Map();
@@ -82,22 +75,9 @@ export const categorizeItems = (
 };
 
 const findCategory = (
-  rawCategory: string,
   categoryMapper: CategoryMapper,
   normalizedDesc: NormalizedExpenseDesc = ""
-): { category: string } => {
-  const lowerCaseCat = rawCategory.toLowerCase();
-
-  if (categoryMapper.has(normalizedDesc)) {
-    return {
-      category: categoryMapper.get(normalizedDesc) ?? CATEGORY_NAMES.Unknown,
-    };
-  }
-
-  return {
-    category: CATEGORY_KEY_WORDS[lowerCaseCat] ?? CATEGORY_NAMES.Unknown,
-  };
-};
+): string => categoryMapper.get(normalizedDesc) ?? CATEGORY_UNKNOWN;
 
 export const normalizeExpenseItem = (
   categoryItems: CategorizedExpenseItems

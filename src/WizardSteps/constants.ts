@@ -1,7 +1,14 @@
-import { mdiChartLine, mdiFileUpload, mdiTag, mdiArchive } from "@mdi/js";
+import {
+  mdiChartLine,
+  mdiFileUpload,
+  mdiTag,
+  mdiArchive,
+  mdiCog,
+} from "@mdi/js";
 import type { WizardStep, WizardStepKey } from "./types";
 
 export const WIZARD_STEP_KEYS: Record<WizardStepKey, WizardStepKey> = {
+  SETUP: "SETUP",
   FILE_UPLOAD: "FILE_UPLOAD",
   FILE_HEADERS: "FILE_HEADERS",
   LOADING_CATEGORIES: "LOADING_CATEGORIES",
@@ -11,6 +18,7 @@ export const WIZARD_STEP_KEYS: Record<WizardStepKey, WizardStepKey> = {
 };
 
 export const WIZARD_STEP_ORDER: WizardStepKey[] = [
+  WIZARD_STEP_KEYS.SETUP,
   WIZARD_STEP_KEYS.FILE_UPLOAD,
   WIZARD_STEP_KEYS.FILE_HEADERS,
   WIZARD_STEP_KEYS.LOADING_CATEGORIES,
@@ -20,13 +28,21 @@ export const WIZARD_STEP_ORDER: WizardStepKey[] = [
 ];
 
 export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
+  SETUP: {
+    url: "/setup",
+    title: "Setup",
+    description: "Configure your expense categories before starting.",
+    showStepHeader: true,
+    order: 1,
+    icon: mdiCog,
+  },
   FILE_UPLOAD: {
     url: "/file-upload",
     title: "File Upload",
     description:
       "Upload your bank statement or expense CSV file to get started.",
     showStepHeader: true,
-    order: 1,
+    order: 2,
     icon: mdiFileUpload,
   },
   FILE_HEADERS: {
@@ -35,7 +51,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     description:
       "We've detected the following headers in your csv file. Please drag them to their corresponding function. The fields marked with * are required.",
     showStepHeader: true,
-    order: 2,
+    order: 3,
     icon: mdiArchive,
   },
   LOADING_CATEGORIES: {
@@ -43,7 +59,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     title: "Loading Categories",
     description: "Predicting your expenses categories.",
     showStepHeader: false,
-    order: 3,
+    order: 4,
     icon: mdiTag,
   },
   CATEGORIZATION: {
@@ -51,7 +67,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     title: "Categorize",
     description: "Categorize Your Expenses",
     showStepHeader: true,
-    order: 4,
+    order: 5,
     icon: mdiTag,
   },
   LOADING_RESULTS: {
@@ -59,7 +75,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     title: "Loading Results",
     description: "Calculating totals.",
     showStepHeader: false,
-    order: 5,
+    order: 6,
     icon: mdiChartLine,
   },
   OUTPUT: {
@@ -67,7 +83,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     title: "Results",
     description: "Results",
     showStepHeader: true,
-    order: 6,
+    order: 7,
     icon: mdiChartLine,
   },
 };

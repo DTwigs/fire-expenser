@@ -5,6 +5,7 @@ export interface AppState {
   expenses: ExpensesState;
   file: FileState;
   wizard: WizardState;
+  settings: SettingsState;
 }
 
 export type ExpenseDescription = string;
@@ -32,6 +33,10 @@ export type WizardState = {
   currentStep: WizardStepKey;
   furthestStep: WizardStepKey;
 };
+
+export interface SettingsState {
+  categories: Record<string, string>;
+}
 
 export type RawExpenseItem = {
   expense_amount: string;

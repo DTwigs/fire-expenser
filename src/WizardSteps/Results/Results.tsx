@@ -1,26 +1,25 @@
 import React, { useMemo, useState } from "react";
-import { useExpenses } from "../../store";
+import { useExpenses, useSettings } from "../../store";
 import { WIZARD_STEP_KEYS } from "../constants";
 import { withWizard, type WithWizardProps } from "../withWizard";
 import { CategoryListHeader } from "../../components/CategoryListHeader";
 import "./Results.css";
-import { CATEGORY_NAMES } from "../Categorization/constants";
 import { Icon } from "@mdi/react";
 import { mdiContentCopy, mdiStar } from "@mdi/js";
 
 const ResultsStep: React.FC<WithWizardProps> = () => {
   const { expenses } = useExpenses();
+  const { settings } = useSettings();
   const { expenseTotal, rebateTotal, totalsByCategory } = expenses.totals;
   const [copied, setCopied] = useState(false);
 
   const getListForClipboard = useMemo(() => {
-    return Object.values(CATEGORY_NAMES)
-      .filter((cat) => cat !== CATEGORY_NAMES.Unknown)
+    return Object.values(settings.categories)
       .map((category) =>
         totalsByCategory[category] ? totalsByCategory[category] : 0
       )
       .join("\t");
-  }, [totalsByCategory]);
+  }, [totalsByCategory, settings.categories]);
 
   const handleCopyToClipboard = async () => {
     try {
@@ -62,14 +61,18 @@ const ResultsStep: React.FC<WithWizardProps> = () => {
       </div>
 
       <div className="category-totals">
-        {Object.entries(totalsByCategory).map(([category, amount]) => (
-          <div key={category} className="category-group">
-            <CategoryListHeader
-              category={category}
-              handleCategoryClick={() => {}}
-              total={amount}
-            />
-          </div>
+        {Object.values(settings.categories).map((category) => (
+          <>
+            {totalsByCategory[category] !== undefined && (
+              <div key={category} className="category-group">
+                <CategoryListHeader
+                  category={category}
+                  handleCategoryClick={() => {}}
+                  total={totalsByCategory[category]}
+                />
+              </div>
+            )}
+          </>
         ))}
       </div>
     </div>

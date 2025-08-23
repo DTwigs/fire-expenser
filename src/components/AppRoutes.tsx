@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Settings from "./Settings";
+import { Setup } from "../WizardSteps/Setup/Setup";
 import { FileUpload } from "../WizardSteps/FileUpload";
 import { Categorization } from "../WizardSteps/Categorization";
 import { Results } from "../WizardSteps/Results";
@@ -11,7 +12,8 @@ import { LoadingResults } from "../WizardSteps/Results/LoadingResults";
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={<FileUpload />} />
+      <Route path="/" element={<Setup />} />
+      <Route path="/setup" element={<Setup />} />
       <Route path="/file-upload" element={<FileUpload />} />
       <Route path="/file-headers" element={<MapFileHeaders />} />
       <Route path="/loading-categories" element={<LoadingCategories />} />

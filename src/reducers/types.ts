@@ -5,6 +5,7 @@ import type {
   CategorizedExpenses,
   CategorizedExpenseItem,
   ExpenseTotals,
+  SettingsState,
 } from "../store/types";
 import type { WizardStepKey } from "../WizardSteps/types";
 import {
@@ -22,10 +23,23 @@ import {
   UPDATE_CATEGORIZED_EXPENSE,
   UPDATE_TOTALS,
   REMOVE_CATEGORIZED_EXPENSE,
+  SET_CATEGORIES,
+  ADD_CATEGORY,
+  REMOVE_CATEGORY,
+  INITIALIZE_STORE,
 } from "./actions";
 
+export type AppInitializeState = {
+  categoryMapper: CategoryMapper;
+  settings: SettingsState;
+};
+
 // Action types
-export type AppAction = ExpensesAction | FileAction | WizardAction;
+export type AppAction =
+  | ExpensesAction
+  | FileAction
+  | WizardAction
+  | SettingsAction;
 
 export type ExpensesAction =
   | { type: typeof EXPENSES_ERROR; payload: string }
@@ -58,7 +72,8 @@ export type ExpensesAction =
       type: typeof REMOVE_CATEGORIZED_EXPENSE;
       payload: CategorizedExpenseItem;
     }
-  | { type: typeof REMOVE_FILE };
+  | { type: typeof REMOVE_FILE }
+  | { type: typeof INITIALIZE_STORE; payload: AppInitializeState };
 
 export type FileAction =
   | { type: typeof ADD_FILE_HEADERS; payload: string[] }
@@ -73,3 +88,9 @@ export type FileAction =
 export type WizardAction =
   | { type: typeof SET_CURRENT_STEP; payload: WizardStepKey }
   | { type: typeof SET_FURTHEST_STEP; payload: WizardStepKey };
+
+export type SettingsAction =
+  | { type: typeof SET_CATEGORIES; payload: Record<string, string> }
+  | { type: typeof ADD_CATEGORY; payload: string }
+  | { type: typeof REMOVE_CATEGORY; payload: string }
+  | { type: typeof INITIALIZE_STORE; payload: AppInitializeState };

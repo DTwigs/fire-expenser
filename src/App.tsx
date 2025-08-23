@@ -1,16 +1,12 @@
-import AppRoutes from "./components/AppRoutes";
-import StepHeader from "./components/StepHeader/StepHeader";
 import { StoreProvider } from "./store";
-import { Header } from "./components/Header";
+import AppEntry from "./AppEntry";
 import "./App.css";
 
 function App() {
   return (
     <StoreProvider>
       <div className="App">
-        <Header />
-        <StepHeader />
-        <AppRoutes />
+        <AppEntry />
       </div>
     </StoreProvider>
   );

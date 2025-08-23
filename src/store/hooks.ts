@@ -42,3 +42,11 @@ export const useWizard = () => {
     dispatch,
   };
 };
+
+export const useSettings = () => {
+  const { state, dispatch } = useStore();
+  return {
+    settings: state.settings,
+    dispatch,
+  };
+};

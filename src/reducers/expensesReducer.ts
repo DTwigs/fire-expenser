@@ -8,9 +8,21 @@ import {
   REMOVE_FILE,
   UPDATE_TOTALS,
   REMOVE_CATEGORIZED_EXPENSE,
+  INITIALIZE_STORE,
 } from "./actions";
 import type { ExpensesAction } from "./types";
 import db from "../db";
+
+export const initialExpensesState: ExpensesState = {
+  categorizedItems: new Map(),
+  error: null,
+  categoryMapper: db.getCategoryMapper(),
+  totals: {
+    totalsByCategory: {},
+    rebateTotal: 0,
+    expenseTotal: 0,
+  },
+};
 
 // Expenses reducer
 export const expensesReducer = (
@@ -96,6 +108,11 @@ export const expensesReducer = (
         ...state,
         categorizedItems: new Map(),
         error: null,
+      };
+    case INITIALIZE_STORE:
+      return {
+        ...state,
+        categoryMapper: action.payload.categoryMapper,
       };
     default:
       return state;

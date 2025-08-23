@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import {
   useExpenses,
+  useSettings,
   type CategorizedExpenseItem,
   type CategoryKey,
 } from "../../store";
@@ -23,7 +24,7 @@ import {
 } from "./utils";
 import { WIZARD_STEP_KEYS } from "../constants";
 import NextStepButton from "../../components/NextStepButton";
-import { CATEGORY_NAMES } from "./constants";
+import { CATEGORY_UNKNOWN } from "./constants";
 import { CategoryItem } from "../../components/CategoryItem";
 import { SelectedExpenseCard } from "../../components/SelectedExpenseCard";
 import type { SlotMachineRef } from "../../components/SlotMachine";
@@ -41,20 +42,20 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
   const carouselRef = useRef<SlotMachineRef>(null);
   const itemsUpdatedRef = useRef<AnimatedItemsUpdatedRef>(null);
   const { expenses, dispatch } = useExpenses();
+  const { settings } = useSettings();
   const [selectedItem, setSelectedItem] =
     useState<CategorizedExpenseItem | null>(null);
 
   const unknownCategoryItems = useMemo(
     () =>
       Array.from(
-        expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.values() ?? []
+        expenses.categorizedItems.get(CATEGORY_UNKNOWN)?.values() ?? []
       ).sort(sortByNormalizedDescription),
     [expenses.categorizedItems]
   );
 
   const isCategorizingUnknown = useMemo(
-    () =>
-      (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ?? 0) >= 1,
+    () => (expenses.categorizedItems.get(CATEGORY_UNKNOWN)?.size ?? 0) >= 1,
     [expenses.categorizedItems]
   );
 
@@ -74,7 +75,7 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
       dispatch({
         type: SWAP_CATEGORIZED_EXPENSE,
         payload: {
-          originCategory: item.category || CATEGORY_NAMES.Unknown,
+          originCategory: item.category || CATEGORY_UNKNOWN,
           newCategory: destinationCategory,
           expense: item,
         },
@@ -188,8 +189,7 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
           <div className="card-front">
             <NextStepButton
               isDisabled={
-                (expenses.categorizedItems.get(CATEGORY_NAMES.Unknown)?.size ??
-                  0) > 0
+                (expenses.categorizedItems.get(CATEGORY_UNKNOWN)?.size ?? 0) > 0
               }
               onClick={handleSubmit}
             />
@@ -211,8 +211,8 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
       </div>
       <div className="categorized-items">
         <div className={`category-wrapper ${selectedItem ? "selected" : ""}`}>
-          {Object.values(CATEGORY_NAMES).map((category) => {
-            if (selectedItem && category === CATEGORY_NAMES.Unknown) {
+          {Object.values(settings.categories).map((category) => {
+            if (selectedItem && category === CATEGORY_UNKNOWN) {
               return null;
             }
             return (

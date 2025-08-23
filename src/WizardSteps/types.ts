@@ -8,6 +8,7 @@ export type WizardStep = {
 };
 
 export type WizardStepKey =
+  | "SETUP"
   | "FILE_UPLOAD"
   | "FILE_HEADERS"
   | "LOADING_CATEGORIES"
