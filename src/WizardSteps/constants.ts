@@ -40,7 +40,7 @@ export const WIZARD_STEPS: Record<WizardStepKey, WizardStep> = {
     url: "/file-upload",
     title: "File Upload",
     description:
-      "Upload your bank statement or expense CSV file to get started.",
+      "Upload your bank statements or expense CSV files to get started.",
     showStepHeader: true,
     order: 2,
     icon: mdiFileUpload,
