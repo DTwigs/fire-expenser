@@ -1,5 +1,12 @@
 import type { FileState } from "../store/types";
 import type { FileAction } from "./types";
+import {
+  ADD_FILE_DATA,
+  ADD_FILE_HEADERS,
+  REMOVE_FILE,
+  UPDATE_FILE_HEADER_ROLES,
+  UPDATE_SINGLE_HEADER_ROLE,
+} from "./actions";
 
 export const initialFileState: FileState = {
   headers: [],
@@ -20,29 +27,29 @@ export const fileReducer = (
   action: FileAction
 ): FileState => {
   switch (action.type) {
-    case "ADD_FILE_HEADERS":
+    case ADD_FILE_HEADERS:
       return {
         ...state,
         headers: action.payload,
       };
-    case "ADD_FILE_DATA":
+    case ADD_FILE_DATA:
       return {
         ...state,
         data: action.payload,
       };
-    case "REMOVE_FILE":
+    case REMOVE_FILE:
       return {
         ...state,
         headers: [],
         data: [],
         fileHeaderRoles: initialFileState.fileHeaderRoles,
       };
-    case "UPDATE_FILE_HEADER_ROLES":
+    case UPDATE_FILE_HEADER_ROLES:
       return {
         ...state,
         fileHeaderRoles: action.payload,
       };
-    case "UPDATE_SINGLE_HEADER_ROLE":
+    case UPDATE_SINGLE_HEADER_ROLE:
       return {
         ...state,
         fileHeaderRoles: {

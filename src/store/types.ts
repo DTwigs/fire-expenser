@@ -24,10 +24,15 @@ export interface ExpensesState {
 }
 
 export interface FileState {
+  files: Record<string, FileDatum>;
+}
+
+export type FileDatum = {
+  fileName: string;
   headers: string[];
   data: Array<{ [key: string]: string }>;
   fileHeaderRoles: FileHeaderRole;
-}
+};
 
 export type WizardState = {
   currentStep: WizardStepKey;
