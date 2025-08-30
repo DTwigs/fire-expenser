@@ -2,14 +2,15 @@ import React, { useState, useCallback } from "react";
 import Icon from "@mdi/react";
 import { mdiFileUpload } from "@mdi/js";
 import { FileItem } from "./FileItem";
+import { isEmpty } from "../../utils/common";
+import type { FileDatum, FileState } from "../../store/types";
 import "./DragAndDropFileInput.css";
 
 type DragAndDropFileInputProps = {
   isLoading: boolean;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
   handleFileProcessing: (file: File) => void;
-  setSelectedFiles: (files: Array<File> | null) => void;
-  selectedFiles: Array<File> | null;
+  files: FileState;
   handleRemoveFile: (fileName: string) => void;
 };
 
@@ -17,28 +18,24 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
   isLoading,
   fileInputRef,
   handleFileProcessing,
-  selectedFiles,
-  setSelectedFiles,
+  files,
   handleRemoveFile,
 }) => {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const handleFileSelect = useCallback(
-    (files: Array<File>) => {
-      if (files && files.length > 0) {
-        let newFiles = [...(selectedFiles ?? [])];
-        Array.from(files).forEach((file) => {
+    (newFiles: Array<File>) => {
+      if (newFiles && newFiles.length > 0) {
+        newFiles.forEach((file) => {
           if (file.type === "text/csv" || file.name.endsWith(".csv")) {
-            newFiles = [...newFiles, file];
             handleFileProcessing(file);
           } else {
             alert("Please select a valid CSV file.");
           }
         });
-        setSelectedFiles(newFiles);
       }
     },
-    [handleFileProcessing, setSelectedFiles, selectedFiles]
+    [handleFileProcessing]
   );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -80,7 +77,7 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
     <>
       <div
         className={`upload-area ${isDragOver ? "drag-over" : ""} ${
-          selectedFiles ? "has-file" : ""
+          !isEmpty(files) ? "has-file" : ""
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -113,10 +110,10 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
       </div>
       <section className="file-info">
         <div className="file-list">
-          {selectedFiles &&
-            selectedFiles.map((file) => (
+          {!isEmpty(files) &&
+            Object.values(files).map((file: FileDatum) => (
               <FileItem
-                key={file.name}
+                key={file.fileName}
                 file={file}
                 isLoading={isLoading}
                 handleRemoveFile={handleRemoveFile}

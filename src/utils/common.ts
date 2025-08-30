@@ -16,3 +16,8 @@ export const normalizeString = (str: string) => {
     .replace(/\s+/g, " ")
     .trim();
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isEmpty = (obj: { [key: string]: any }) => {
+  return obj && Object.keys(obj).length === 0;
+};
