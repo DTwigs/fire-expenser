@@ -6,16 +6,67 @@
   width: 50%;
 }
 
-/* Header Roles Section */
-.header-roles-section {
-  margin-bottom: 40px;
+.file-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
 }
 
-.header-roles-section h3 {
-  color: var(--color-light-text);
-  margin-bottom: 15px;
-  font-size: 1.2em;
+.file-nav-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
 }
+
+.file-nav-item {
+  position: relative;
+}
+
+.required-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-secondary);
+}
+
+.file-nav-button {
+  background-color: var(--color-background-tint);
+  color: var(--color-light-text);
+  border: none;
+  padding: 12px;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  font-size: 14px;
+  overflow-wrap: break-word;
+  width: 150px;
+}
+
+.file-nav-button:hover {
+  /* background-color: var(--color-background-light); */
+  color: var(--color-tertiary);
+}
+
+.file-nav-button.nav-button-selected {
+  background-color: var(--color-background-light);
+  color: var(--color-light-text);
+}
+
+.file-nav-button.nav-button-selected:hover {
+  color: var(--color-tertiary);
+}
+
+.file-content-container {
+  border-radius: 0 4px 4px 4px;
+  padding: 20px;
+  background-color: var(--color-background-light);
+}
+
+/* Header Roles Section */
 
 .header-roles-container {
   display: flex;
@@ -67,7 +118,7 @@
 .required-mark {
   color: var(--color-secondary);
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 .mapped-header {
@@ -127,14 +178,14 @@
 }
 
 /* CSV Headers Section */
-.csv-headers-section {
+.map-headers-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
 }
 
-.csv-headers-section h4 {
+.map-headers-section h4 {
   color: var(--color-light-text);
   margin: 0;
 }

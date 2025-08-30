@@ -1,16 +1,15 @@
 import type {
-  FileDataItem,
   FileHeaderRole,
   CategoryMapper,
   CategorizedExpenses,
   CategorizedExpenseItem,
   ExpenseTotals,
   SettingsState,
+  FileDatum,
 } from "../store/types";
 import type { WizardStepKey } from "../WizardSteps/types";
 import {
-  ADD_FILE_DATA,
-  ADD_FILE_HEADERS,
+  ADD_FILE,
   EXPENSES_ERROR,
   REMOVE_FILE,
   SET_CURRENT_STEP,
@@ -18,7 +17,6 @@ import {
   UPDATE_CATEGORY_MAPPER,
   UPDATE_CATEGORIZED_EXPENSES,
   SWAP_CATEGORIZED_EXPENSE,
-  UPDATE_FILE_HEADER_ROLES,
   UPDATE_SINGLE_HEADER_ROLE,
   UPDATE_CATEGORIZED_EXPENSE,
   UPDATE_TOTALS,
@@ -76,13 +74,15 @@ export type ExpensesAction =
   | { type: typeof INITIALIZE_STORE; payload: AppInitializeState };
 
 export type FileAction =
-  | { type: typeof ADD_FILE_HEADERS; payload: string[] }
-  | { type: typeof ADD_FILE_DATA; payload: FileDataItem[] }
-  | { type: typeof REMOVE_FILE }
-  | { type: typeof UPDATE_FILE_HEADER_ROLES; payload: FileHeaderRole }
+  | { type: typeof ADD_FILE; payload: FileDatum }
+  | { type: typeof REMOVE_FILE; payload: string }
   | {
       type: typeof UPDATE_SINGLE_HEADER_ROLE;
-      payload: { role: keyof FileHeaderRole; header: string | null };
+      payload: {
+        fileName: string;
+        role: keyof FileHeaderRole;
+        header: string | null;
+      };
     };
 
 export type WizardAction =

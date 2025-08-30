@@ -30,7 +30,7 @@ export const useExpenses = () => {
 export const useFile = () => {
   const { state, dispatch } = useStore();
   return {
-    file: state.file,
+    files: state.files,
     dispatch,
   };
 };

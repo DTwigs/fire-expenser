@@ -1,140 +1,80 @@
 import React, { useCallback, useState } from "react";
 import NextStepButton from "../../components/NextStepButton";
 import { useFile } from "../../store";
-import { allRoles, isNextStepDisabled, isRoleMapped } from "./utils";
+import { hasAllRequiredHeaders, isNextStepDisabled } from "./utils";
 import type { FileHeaderRole } from "../../store/types";
 import { WIZARD_STEP_KEYS } from "../constants";
-import { HeaderRole } from "./HeaderRole";
-import "./MapFileHeaders.css";
+import { UPDATE_SINGLE_HEADER_ROLE } from "../../reducers/actions";
 import { withWizard, type WithWizardProps } from "../withWizard";
+import { MapHeadersPerFile } from "./MapHeadersPerFile";
+import "./MapFileHeaders.css";
 
 const MapFileHeadersStep: React.FC<WithWizardProps> = ({
   handleNextStep,
   step,
 }) => {
-  const { file, dispatch } = useFile();
-  const [dragOverRole, setDragOverRole] = useState<keyof FileHeaderRole | null>(
-    null
-  );
+  const { files, dispatch } = useFile();
+  const [fileIndex, setFileIndex] = useState<number>(0);
 
-  const handleDragStart = useCallback((e: React.DragEvent, header: string) => {
-    e.dataTransfer.setData("text/plain", header);
-  }, []);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-  }, []);
-
-  const handleDragEnter = useCallback(
-    (e: React.DragEvent, role: keyof FileHeaderRole) => {
-      e.preventDefault();
-      setDragOverRole(role);
-    },
-    []
-  );
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-
-    // Only clear drag state if we're actually leaving the header role
-    // Check if the related target is outside our header role
-    const currentTarget = e.currentTarget as HTMLElement;
-    const relatedTarget = e.relatedTarget as HTMLElement;
-
-    if (!currentTarget.contains(relatedTarget)) {
-      setDragOverRole(null);
-    }
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent, role: keyof FileHeaderRole) => {
-      e.preventDefault();
-      setDragOverRole(null);
-      const header = e.dataTransfer.getData("text/plain");
-
-      // Check if this header is already mapped to another role
-      const isAlreadyMapped = Object.values(file.fileHeaderRoles).includes(
-        header
-      );
-
-      if (!isAlreadyMapped) {
-        dispatch({
-          type: "UPDATE_SINGLE_HEADER_ROLE",
-          payload: { role, header },
-        });
-      }
-    },
-    [dispatch, file]
-  );
-
-  const handleRemoveMapping = useCallback(
-    (role: keyof FileHeaderRole) => {
+  const updateHeaderRole = useCallback(
+    (fileName: string, role: keyof FileHeaderRole, header: string | null) => {
       dispatch({
-        type: "UPDATE_SINGLE_HEADER_ROLE",
-        payload: { role, header: null },
+        type: UPDATE_SINGLE_HEADER_ROLE,
+        payload: { fileName, role, header },
       });
     },
     [dispatch]
   );
 
+  const handleNextFile = useCallback(() => {
+    setFileIndex((prev) => prev + 1);
+  }, []);
+
+  const fileArray = Object.values(files);
+
   return (
     <section className="step-container file-headers-container">
       <h2>{step.title}</h2>
       <h3>{step.description}</h3>
-
-      {/* File Header Roles */}
-      <section className="header-roles-section">
-        <h4>File Header Roles</h4>
-        <div className="header-roles-container">
-          {allRoles.map((role) => (
-            <div
-              key={role}
-              onDragOver={handleDragOver}
-              onDragEnter={(e) => handleDragEnter(e, role)}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, role)}
-            >
-              <HeaderRole
-                file={file}
-                role={role}
-                dragOverRole={dragOverRole}
-                handleRemoveMapping={handleRemoveMapping}
-              />
+      <NextStepButton
+        onClick={handleNextStep}
+        isDisabled={isNextStepDisabled(fileArray)}
+      />
+      <div className="file-section">
+        <div className="file-nav-container">
+          {fileArray.map((file, index) => (
+            <div key={file.fileName} className="file-nav-item">
+              {!hasAllRequiredHeaders(fileArray[index]) && (
+                <span className="required-badge" />
+              )}
+              <button
+                onClick={() => setFileIndex(index)}
+                className={`file-nav-button ${
+                  fileIndex === index ? "nav-button-selected" : ""
+                }`}
+              >
+                {file.fileName}
+              </button>
             </div>
           ))}
         </div>
-      </section>
-
-      {/* CSV Headers */}
-
-      <section className="csv-headers-section">
-        <h4>CSV Headers</h4>
-        <p>
-          We've detected the following headers in your csv file. Please drag
-          them to their corresponding function. The fields marked with{" "}
-          <span className="required-field">*</span> are required.
-        </p>
-        <div className="csv-headers-container">
-          {file.headers.map((header, index) => {
-            const isMapped = isRoleMapped(file, header);
-            return (
-              <div
-                key={index}
-                className={`button csv-header ${isMapped ? "mapped" : ""}`}
-                draggable={!isMapped}
-                onDragStart={(e) => handleDragStart(e, header)}
-              >
-                {header}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      <NextStepButton
-        onClick={handleNextStep}
-        isDisabled={isNextStepDisabled(file)}
-      />
+        <section className="file-content-container">
+          <h4>{fileArray[fileIndex].fileName}</h4>
+          <MapHeadersPerFile
+            file={fileArray[fileIndex]}
+            updateHeaderRole={updateHeaderRole}
+          />
+          {fileIndex < fileArray.length - 1 && (
+            <button
+              className="submit-button"
+              onClick={handleNextFile}
+              disabled={!hasAllRequiredHeaders(fileArray[fileIndex])}
+            >
+              Next File
+            </button>
+          )}
+        </section>
+      </div>
     </section>
   );
 };

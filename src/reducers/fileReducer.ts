@@ -1,25 +1,8 @@
 import type { FileState } from "../store/types";
 import type { FileAction } from "./types";
-import {
-  ADD_FILE_DATA,
-  ADD_FILE_HEADERS,
-  REMOVE_FILE,
-  UPDATE_FILE_HEADER_ROLES,
-  UPDATE_SINGLE_HEADER_ROLE,
-} from "./actions";
+import { ADD_FILE, REMOVE_FILE, UPDATE_SINGLE_HEADER_ROLE } from "./actions";
 
-export const initialFileState: FileState = {
-  headers: [],
-  data: [],
-  fileHeaderRoles: {
-    date: null,
-    expense_amount: "",
-    rebate_amount: null,
-    card: null,
-    category: "",
-    description: "",
-  },
-};
+export const initialFileState: FileState = {};
 
 // File reducer
 export const fileReducer = (
@@ -27,36 +10,38 @@ export const fileReducer = (
   action: FileAction
 ): FileState => {
   switch (action.type) {
-    case ADD_FILE_HEADERS:
+    case ADD_FILE: {
+      const file = action.payload;
+      const files = { ...state };
+      files[file.fileName] = file;
+
       return {
-        ...state,
-        headers: action.payload,
+        ...files,
       };
-    case ADD_FILE_DATA:
+    }
+    case REMOVE_FILE: {
+      const files = { ...state };
+      delete files[action.payload];
       return {
-        ...state,
-        data: action.payload,
+        ...files,
       };
-    case REMOVE_FILE:
+    }
+    case UPDATE_SINGLE_HEADER_ROLE: {
+      const { fileName, role, header } = action.payload;
+      const files = { ...state };
+      if (fileName in files) {
+        files[fileName] = {
+          ...files[fileName],
+          fileHeaderRoles: {
+            ...files[fileName].fileHeaderRoles,
+            [role]: header,
+          },
+        };
+      }
       return {
-        ...state,
-        headers: [],
-        data: [],
-        fileHeaderRoles: initialFileState.fileHeaderRoles,
+        ...files,
       };
-    case UPDATE_FILE_HEADER_ROLES:
-      return {
-        ...state,
-        fileHeaderRoles: action.payload,
-      };
-    case UPDATE_SINGLE_HEADER_ROLE:
-      return {
-        ...state,
-        fileHeaderRoles: {
-          ...state.fileHeaderRoles,
-          [action.payload.role]: action.payload.header,
-        },
-      };
+    }
     default:
       return state;
   }
