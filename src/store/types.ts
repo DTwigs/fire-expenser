@@ -3,7 +3,7 @@ import type { WizardStepKey } from "../WizardSteps/types";
 // Global store types
 export interface AppState {
   expenses: ExpensesState;
-  file: FileState;
+  files: FileState;
   wizard: WizardState;
   settings: SettingsState;
 }
@@ -23,9 +23,7 @@ export interface ExpensesState {
   error: string | null;
 }
 
-export interface FileState {
-  files: Record<string, FileDatum>;
-}
+export type FileState = Record<string, FileDatum>;
 
 export type FileDatum = {
   fileName: string;

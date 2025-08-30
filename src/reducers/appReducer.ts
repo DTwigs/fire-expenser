@@ -11,7 +11,7 @@ import type { FileAction } from "./types";
 export const appReducer = (state: AppState, action: AppAction): AppState => {
   return {
     expenses: expensesReducer(state.expenses, action as ExpensesAction),
-    file: fileReducer(state.file, action as FileAction),
+    files: fileReducer(state.files, action as FileAction),
     wizard: wizardReducer(state.wizard, action as WizardAction),
     settings: settingsReducer(state.settings, action as SettingsAction),
   };

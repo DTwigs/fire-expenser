@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { parseCSV } from "../../utils/fileManagement";
 import { useFile, useWizard, type FileDataItem } from "../../store";
 import DragAndDropFileInput from "../../components/DragAndDropFileInput/DragAndDropFileInput";
@@ -6,11 +6,7 @@ import NextStepButton from "../../components/NextStepButton";
 import { WIZARD_STEP_KEYS } from "../constants";
 import "./FileUpload.css";
 import { withWizard, type WithWizardProps } from "../withWizard";
-import {
-  ADD_FILE_DATA,
-  ADD_FILE_HEADERS,
-  REMOVE_FILE,
-} from "../../reducers/actions";
+import { ADD_FILE, REMOVE_FILE } from "../../reducers/actions";
 import { SET_CURRENT_STEP } from "../../reducers/actions";
 
 const FileUploadStep: React.FC<WithWizardProps> = ({
@@ -23,20 +19,24 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    dispatchWizard({
-      type: SET_CURRENT_STEP,
-      payload: WIZARD_STEP_KEYS.FILE_UPLOAD,
-    });
-  }, [dispatchWizard]);
-
   const onParseComplete = useCallback(
-    (results: Papa.ParseResult<FileDataItem>) => {
+    (fileName: string) => (results: Papa.ParseResult<FileDataItem>) => {
       dispatch({
-        type: ADD_FILE_HEADERS,
-        payload: results.meta.fields ?? [],
+        type: ADD_FILE,
+        payload: {
+          fileName,
+          headers: results.meta.fields ?? [],
+          data: results.data ?? [],
+          fileHeaderRoles: {
+            date: "",
+            expense_amount: "",
+            category: "",
+            description: "",
+            rebate_amount: "",
+            card: "",
+          },
+        },
       });
-      dispatch({ type: ADD_FILE_DATA, payload: results.data ?? [] });
     },
     [dispatch]
   );
@@ -55,14 +55,14 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
   const handleFileProcessing = useCallback(
     (file: File) => {
       setIsLoading(true);
-      dispatch({ type: REMOVE_FILE });
-
-      setTimeout(() => {
-        setIsLoading(false);
-        parseCSV({ file, onComplete: onParseComplete, onError: onParseError });
-      }, 1000);
+      parseCSV({
+        file,
+        onComplete: onParseComplete(file.name),
+        onError: onParseError,
+      });
+      setIsLoading(false);
     },
-    [onParseComplete, onParseError, dispatch]
+    [onParseComplete, onParseError]
   );
 
   const handleRemoveFile = useCallback(
@@ -75,7 +75,7 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-      dispatch({ type: REMOVE_FILE });
+      dispatch({ type: REMOVE_FILE, payload: fileName });
     },
     [dispatch, fileInputRef, selectedFiles]
   );

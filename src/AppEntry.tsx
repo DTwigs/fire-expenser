@@ -9,7 +9,6 @@ function AppEntry() {
   const { dispatch } = useStore();
 
   useEffect(() => {
-    console.log("settings: ", db.getSettings());
     dispatch({
       type: "INITIALIZE_STORE",
       payload: {

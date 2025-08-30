@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import Icon from "@mdi/react";
-import { mdiFileUpload, mdiFileDocument, mdiTrashCan } from "@mdi/js";
+import { mdiFileUpload } from "@mdi/js";
+import { FileItem } from "./FileItem";
 import "./DragAndDropFileInput.css";
 
 type DragAndDropFileInputProps = {
@@ -24,7 +25,6 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
 
   const handleFileSelect = useCallback(
     (files: Array<File>) => {
-      console.log({ files });
       if (files && files.length > 0) {
         let newFiles = [...(selectedFiles ?? [])];
         Array.from(files).forEach((file) => {
@@ -71,8 +71,6 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
     },
     [handleFileSelect]
   );
-
-  console.log(selectedFiles);
 
   const handleBrowseClick = useCallback(() => {
     fileInputRef.current?.click();
@@ -131,36 +129,3 @@ const FileUpload: React.FC<DragAndDropFileInputProps> = ({
 };
 
 export default FileUpload;
-
-type FileItemProps = {
-  file: File;
-  isLoading: boolean;
-  handleRemoveFile: (fileName: string) => void;
-};
-
-const FileItem: React.FC<FileItemProps> = ({
-  file,
-  isLoading,
-  handleRemoveFile,
-}) => {
-  return (
-    <div className="file-item">
-      <div className="file-icon">
-        <Icon path={mdiFileDocument} size={1} />
-      </div>
-      <div className="file-details">
-        <h4>{file.name}</h4>
-        <p>{(file.size / 1024).toFixed(1)} KB</p>
-        {isLoading && <p className="loading">Processing...</p>}
-      </div>
-      <button
-        type="button"
-        className="remove-button button file-icon"
-        onClick={() => handleRemoveFile(file.name)}
-        disabled={isLoading}
-      >
-        <Icon path={mdiTrashCan} size={1} />
-      </button>
-    </div>
-  );
-};

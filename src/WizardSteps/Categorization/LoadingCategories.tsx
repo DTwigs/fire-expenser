@@ -10,11 +10,14 @@ const LoadingCategoriesStep: React.FC<WithWizardProps> = ({
   handleNextStep,
   step,
 }) => {
-  const { file } = useFile();
+  const { files } = useFile();
   const { expenses, dispatch } = useExpenses();
   const rawExpenses = useMemo(
-    () => convertToRawExpenses(file.data, file.fileHeaderRoles),
-    [file.data, file.fileHeaderRoles]
+    () =>
+      Object.values(files)
+        .map((file) => convertToRawExpenses(file.data, file.fileHeaderRoles))
+        .flat(),
+    [files]
   );
 
   const calcedCategorizedItems = useMemo(

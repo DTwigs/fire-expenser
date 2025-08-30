@@ -6,7 +6,7 @@ import { initialExpensesState } from "../reducers/expensesReducer";
 
 export const initialState: AppState = {
   expenses: initialExpensesState,
-  file: initialFileState,
+  files: initialFileState,
   wizard: initialWizardState,
   settings: db.getSettings(),
 };

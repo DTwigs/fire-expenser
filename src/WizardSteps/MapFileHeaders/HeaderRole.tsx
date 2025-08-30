@@ -1,9 +1,9 @@
 import { getMappedHeader, isRequiredRole } from "./utils";
-import type { FileHeaderRole, FileState } from "../../store/types";
+import type { FileHeaderRole, FileDatum } from "../../store/types";
 import { capitalizeString } from "../../utils/common";
 
 type HeaderRoleProps = {
-  file: FileState;
+  file: FileDatum;
   role: keyof FileHeaderRole;
   dragOverRole: keyof FileHeaderRole | null;
   handleRemoveMapping: (role: keyof FileHeaderRole) => void;
