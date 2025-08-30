@@ -4,18 +4,18 @@ import { useFile, useWizard, type FileDataItem } from "../../store";
 import DragAndDropFileInput from "../../components/DragAndDropFileInput/DragAndDropFileInput";
 import NextStepButton from "../../components/NextStepButton";
 import { WIZARD_STEP_KEYS } from "../constants";
-import "./FileUpload.css";
 import { withWizard, type WithWizardProps } from "../withWizard";
 import { ADD_FILE, REMOVE_FILE } from "../../reducers/actions";
-import { SET_CURRENT_STEP } from "../../reducers/actions";
+import { SET_FURTHEST_STEP } from "../../reducers/actions";
+import { isEmpty } from "../../utils/common";
+import "./FileUpload.css";
 
 const FileUploadStep: React.FC<WithWizardProps> = ({
   handleNextStep,
   step,
 }) => {
   const { dispatch: dispatchWizard } = useWizard();
-  const { dispatch } = useFile();
-  const [selectedFiles, setSelectedFiles] = useState<Array<File> | null>(null);
+  const { files, dispatch } = useFile();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -37,15 +37,19 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
           },
         },
       });
+      dispatchWizard({
+        type: SET_FURTHEST_STEP,
+        payload: WIZARD_STEP_KEYS.FILE_UPLOAD,
+      });
     },
-    [dispatch]
+    [dispatch, dispatchWizard]
   );
 
   const onParseError = useCallback(
     (error: Papa.ParseError) => {
       console.error("Error parsing CSV:", error);
       dispatchWizard({
-        type: SET_CURRENT_STEP,
+        type: SET_FURTHEST_STEP,
         payload: WIZARD_STEP_KEYS.FILE_UPLOAD,
       });
     },
@@ -67,17 +71,16 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
 
   const handleRemoveFile = useCallback(
     (fileName: string) => {
-      if (selectedFiles) {
-        setSelectedFiles(
-          selectedFiles.filter((file) => file.name !== fileName)
-        );
-      }
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
       dispatch({ type: REMOVE_FILE, payload: fileName });
+      dispatchWizard({
+        type: SET_FURTHEST_STEP,
+        payload: WIZARD_STEP_KEYS.FILE_UPLOAD,
+      });
     },
-    [dispatch, fileInputRef, selectedFiles]
+    [dispatch, dispatchWizard, fileInputRef]
   );
 
   return (
@@ -86,8 +89,7 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
       <p>{step.description}</p>
       <div className="file-upload-container">
         <DragAndDropFileInput
-          selectedFiles={selectedFiles}
-          setSelectedFiles={setSelectedFiles}
+          files={files}
           handleFileProcessing={handleFileProcessing}
           handleRemoveFile={handleRemoveFile}
           isLoading={isLoading}
@@ -96,7 +98,7 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
       </div>
       <NextStepButton
         onClick={handleNextStep}
-        isDisabled={!selectedFiles && !isLoading}
+        isDisabled={isEmpty(files) && !isLoading}
       />
     </section>
   );

@@ -1,5 +1,6 @@
 import type { WizardState } from "../store/types";
 import { WIZARD_STEP_KEYS, WIZARD_STEPS } from "../WizardSteps/constants";
+import { SET_CURRENT_STEP, SET_FURTHEST_STEP } from "./actions";
 import type { WizardAction } from "./types";
 
 export const initialWizardState: WizardState = {
@@ -12,7 +13,7 @@ export const wizardReducer = (
   action: WizardAction
 ): WizardState => {
   switch (action.type) {
-    case "SET_CURRENT_STEP":
+    case SET_CURRENT_STEP:
       if (
         WIZARD_STEPS[action.payload].order >
         WIZARD_STEPS[state.furthestStep].order
@@ -27,7 +28,7 @@ export const wizardReducer = (
         ...state,
         currentStep: action.payload,
       };
-    case "SET_FURTHEST_STEP":
+    case SET_FURTHEST_STEP:
       return {
         ...state,
         currentStep: action.payload,
