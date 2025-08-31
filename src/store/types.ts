@@ -27,9 +27,12 @@ export type FileState = Record<string, FileDatum>;
 
 export type FileDatum = {
   fileName: string;
-  headers: string[];
-  data: Array<{ [key: string]: string }>;
   fileHeaderRoles: FileHeaderRole;
+} & FileDatumContent;
+
+export type FileDatumContent = {
+  headers: string[];
+  data: Array<FileDataItem>;
 };
 
 export type WizardState = {
@@ -42,7 +45,7 @@ export interface SettingsState {
 }
 
 export type RawExpenseItem = {
-  expense_amount: string;
+  expense_amount: number;
   category: CategoryKey;
   description: ExpenseDescription;
   rebate_amount?: string | null;

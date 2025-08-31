@@ -44,6 +44,7 @@
   font-size: 14px;
   overflow-wrap: break-word;
   width: 150px;
+  height: 100%;
 }
 
 .file-nav-button:hover {
