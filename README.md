@@ -1,12 +1,14 @@
-## 🚧 Currently in Development 🚧
-
 # FIRE EXPENSOR
 
 ## Take your bank statements and sum up your expenses into categories
 
-Quickly categorize your expenses and FIRE Expensor will learn from your categorization and apply categories to your expenses automatically. Decreasing the time your budgeting takes at the end of every month.
+FIRE Expensor will help you quickly categorize your expenses by learning from your preferred categorizatioon. After FIRE expensor has learned your ways, it will automatically categorize your expenses for you. The time your budgeting takes will be decimated!
 
-Easily copy your categorized expenses into your budgeting spreadsheet!
+Easily copy your categorized expenses into your budgeting spreadsheet.
+
+
+<img width="979" height="652" alt="Screenshot 2025-08-30 at 5 26 00 PM" src="https://github.com/user-attachments/assets/c463d8d0-b7b6-427a-9197-cd2073a8d285" />
+
 
 # React + TypeScript + Vite
 
