@@ -3,15 +3,14 @@ import type { FileHeaderRole } from "../../store/types";
 
 export const requiredRoles: (keyof FileHeaderRole)[] = [
   "expense_amount",
-  "category",
   "description",
 ];
 
 export const allRoles: (keyof FileHeaderRole)[] = [
   "date",
+  "description",
   "expense_amount",
   "category",
-  "description",
   "rebate_amount",
   "card",
 ];

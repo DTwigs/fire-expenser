@@ -19,13 +19,18 @@ export const convertToRawExpenses = (
 ): RawExpenseItem[] => {
   return fileData.map((item) => {
     const expense: RawExpenseItem = {
-      expense_amount: item[fileHeaderRoles.expense_amount] ?? "",
+      expense_amount: Number(item[fileHeaderRoles.expense_amount] ?? 0),
       category: item[fileHeaderRoles.category] ?? "",
       description: item[fileHeaderRoles.description] ?? "",
     };
 
     if (fileHeaderRoles.rebate_amount) {
       expense.rebate_amount = item[fileHeaderRoles.rebate_amount];
+    } else {
+      // reverse value because expenses and rebates are coming from one column
+      // typically banks will use negative for Expense and positive for Rebate
+      // but this app does the opposite.
+      expense.expense_amount = expense.expense_amount * -1;
     }
 
     if (fileHeaderRoles.card) {

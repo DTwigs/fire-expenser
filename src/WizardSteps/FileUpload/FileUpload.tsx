@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
 import { parseCSV } from "../../utils/fileManagement";
-import { useFile, useWizard, type FileDataItem } from "../../store";
+import { useFile, useWizard, type FileDatumContent } from "../../store";
 import DragAndDropFileInput from "../../components/DragAndDropFileInput/DragAndDropFileInput";
 import NextStepButton from "../../components/NextStepButton";
 import { WIZARD_STEP_KEYS } from "../constants";
@@ -20,12 +20,12 @@ const FileUploadStep: React.FC<WithWizardProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const onParseComplete = useCallback(
-    (fileName: string) => (results: Papa.ParseResult<FileDataItem>) => {
+    (fileName: string) => (results: FileDatumContent) => {
       dispatch({
         type: ADD_FILE,
         payload: {
           fileName,
-          headers: results.meta.fields ?? [],
+          headers: results.headers ?? [],
           data: results.data ?? [],
           fileHeaderRoles: {
             date: "",
