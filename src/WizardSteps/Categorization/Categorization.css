@@ -271,21 +271,32 @@
   display: flex;
 }
 
-.trash-icon-wrapper {
+.icon-wrapper {
   display: block;
   position: absolute;
-  right: -32px;
   top: 2px;
   color: var(--color-background-tint);
   cursor: pointer;
+}
+
+.trash-icon-wrapper {
+  right: -32px;
+}
+
+.flip-icon-wrapper {
+  left: -32px;
 }
 
 .trash-icon-wrapper:hover {
   color: var(--color-secondary);
 }
 
-.slot-machine-item--above .trash-icon-wrapper,
-.slot-machine-item--below .trash-icon-wrapper {
+.flip-icon-wrapper:hover {
+  color: var(--color-primary);
+}
+
+.slot-machine-item--above .icon-wrapper,
+.slot-machine-item--below .icon-wrapper {
   display: none;
 }
 

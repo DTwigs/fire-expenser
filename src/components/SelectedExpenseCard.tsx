@@ -12,6 +12,7 @@ type SelectedExpenseCardProps = {
   carouselItems: CategorizedExpenseItem[];
   carouselRef: React.RefObject<SlotMachineRef> | null;
   deleteItem: (item: CategorizedExpenseItem) => void;
+  flipItemValue: (item: CategorizedExpenseItem) => void;
 };
 
 export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
@@ -21,6 +22,7 @@ export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
   carouselItems,
   carouselRef,
   deleteItem,
+  flipItemValue,
 }) => {
   const [frozenNodes, setFrozenNodes] = useState<React.ReactNode[]>([]);
 
@@ -31,7 +33,12 @@ export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
     const nodes = carouselItems
       .sort(sortByNormalizedDescription)
       .map((item) => (
-        <ExpenseItem key={item?.id} item={item} deleteItem={deleteItem} />
+        <ExpenseItem
+          key={item?.id}
+          item={item}
+          deleteItem={deleteItem}
+          flipItemValue={flipItemValue}
+        />
       ));
     setFrozenNodes(nodes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,6 +59,7 @@ export const SelectedExpenseCard: React.FC<SelectedExpenseCardProps> = ({
             key={selectedItem?.id}
             item={selectedItem}
             deleteItem={deleteItem}
+            flipItemValue={flipItemValue}
           />
         )
       )}

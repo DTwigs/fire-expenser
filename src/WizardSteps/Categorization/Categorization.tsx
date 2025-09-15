@@ -148,6 +148,13 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
     }
   };
 
+  const handleFlipItemValue = (item: CategorizedExpenseItem) => {
+    dispatch({
+      type: UPDATE_CATEGORIZED_EXPENSE,
+      payload: { ...item, amount: item.amount * -1 },
+    });
+  };
+
   const handleSubmit = () => {
     const newMapper = populateCategoryMapper(expenses);
 
@@ -202,6 +209,7 @@ const CategorizationStep: React.FC<WithWizardProps> = ({
               handleApplyToAllClick={handleApplyToAllClick}
               carouselRef={carouselRef}
               deleteItem={handleDeleteItem}
+              flipItemValue={handleFlipItemValue}
             />
           </div>
         </div>
